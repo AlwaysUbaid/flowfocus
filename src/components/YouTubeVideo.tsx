@@ -14,33 +14,33 @@ interface YouTubeVideoProps {
 // Pre-defined playlist of YouTube videos
 const videoPlaylist = [
   { 
-    id: "jfKfPfyJRdk", 
-    title: "Lofi Hip Hop Radio", 
-    description: "Beats to relax/study to",
+    id: "Fxv6LgHgMy0", 
+    title: "Fantasy Music", 
+    description: "Magical instrumental soundtrack",
     color: "bg-gradient-to-b from-[#9b87f5] to-[#6E59A5]" 
   },
   { 
-    id: "rUxyKA_-grg", 
-    title: "Deep Focus Music", 
-    description: "Concentration & productivity",
+    id: "KaGEVNdPcyc", 
+    title: "Epic Fantasy", 
+    description: "Adventure & relaxation music",
     color: "bg-gradient-to-b from-[#D6BCFA] to-[#8B5CF6]" 
   },
   { 
-    id: "lTRiuFIWV54", 
-    title: "Study with Me", 
-    description: "Pomodoro 25/5",
+    id: "iPzmBKQVcjo", 
+    title: "Medieval Fantasy", 
+    description: "Celtic & fantasy soundtrack",
     color: "bg-gradient-to-b from-[#9B87F5] to-[#7E69AB]" 
   },
   { 
-    id: "n61ULEU7CO0", 
-    title: "Nature Sounds", 
-    description: "Forest ambience",
+    id: "_MZb0Xbzz7Y", 
+    title: "Celtic Fantasy", 
+    description: "Mystical Celtic music",
     color: "bg-gradient-to-b from-[#E5DEFF] to-[#9B87F5]" 
   },
   { 
-    id: "mPZkdNFkNps", 
-    title: "Ambient Study Music", 
-    description: "Improve focus & concentration",
+    id: "kyZZeS6nsFw", 
+    title: "Fantasy Epic", 
+    description: "Mystical instrumental soundtrack",
     color: "bg-gradient-to-b from-[#7E69AB] to-[#4E3980]" 
   }
 ];
