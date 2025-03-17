@@ -94,10 +94,10 @@ const Index = () => {
               </div>
             </div>
             
-            {/* Add YouTube Video component */}
+            {/* Add YouTube Video component - updated to use an empty video source initially */}
             <YouTubeVideo 
-              videoSrc="https://www.youtube.com/embed/videoseries?si=oSTaTP10TPATYzBt&list=PLVAprBtKkmgNWhZSH2gmVLG83B0f_0Xdx" 
-              title="Focus Music Playlist" 
+              videoSrc="" 
+              title="Focus Music Player" 
             />
           </div>
         </div>
