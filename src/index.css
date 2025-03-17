@@ -1,10 +1,10 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 
 @layer base {
@@ -38,7 +38,7 @@
     --ring: 224 71.4% 4.1%;
 
     --radius: 1rem;
-
+    
     /* Custom colors */
     --distracted: 0 84.2% 60.2%;
     --okay: 45 93% 47%;
@@ -50,6 +50,11 @@
     --retro-secondary: 310 70% 60%;
     --retro-accent: 330 80% 60%;
     --retro-glow: 0 0 10px rgba(138, 43, 226, 0.7);
+    
+    /* Pixelated Retro Theme */
+    --pixel-border: 3px solid rgb(60, 60, 60);
+    --pixel-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+    --pixel-bg: rgba(255, 255, 255, 0.9);
   }
 
   .dark {
@@ -86,6 +91,11 @@
     --retro-secondary: 310 70% 70%;
     --retro-accent: 330 80% 70%;
     --retro-glow: 0 0 15px rgba(138, 43, 226, 0.9);
+    
+    /* Pixelated Retro Theme - Dark Mode */
+    --pixel-border: 3px solid rgb(100, 100, 100);
+    --pixel-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
+    --pixel-bg: rgba(40, 40, 50, 0.9);
   }
 }
 
@@ -97,6 +107,7 @@
   body {
     @apply bg-background text-foreground font-sans;
     font-feature-settings: "rlig" 1, "calt" 1;
+    image-rendering: pixelated;
   }
 }
 
@@ -111,25 +122,60 @@ html, body, #root {
 
 /* Retro theme additions */
 .retro-title {
-  font-family: 'VT323', monospace;
-  letter-spacing: 1px;
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+  font-family: 'Press Start 2P', monospace;
+  letter-spacing: 0;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
+  @apply tracking-tight;
 }
 
 .retro-text {
-  font-family: 'Space Mono', monospace;
-  letter-spacing: -1px;
-  text-shadow: 0 0 5px rgba(130, 87, 229, 0.5);
+  font-family: 'VT323', monospace;
+  letter-spacing: 0;
+  font-size: 1.2em;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
 }
 
 .retro-label {
   font-family: 'VT323', monospace;
   letter-spacing: 0.5px;
+  font-size: 1.2em;
+}
+
+/* Pixelated Elements */
+.pixel-border {
+  border: var(--pixel-border);
+  box-shadow: var(--pixel-shadow);
+  position: relative;
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 3%, 97% 3%, 97% 97%, 3% 97%, 3% 3%, 0% 3%
+  );
+}
+
+.pixel-bg {
+  background: var(--pixel-bg);
+}
+
+.pixel-button {
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  border: var(--pixel-border);
+  box-shadow: var(--pixel-shadow);
+  transition: all 0.1s ease;
+  transform-origin: center;
+  image-rendering: pixelated;
+}
+
+.pixel-button:active {
+  transform: translateY(4px);
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
 }
 
 .retro-button {
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
+  font-family: 'VT323', monospace;
+  letter-spacing: 1px;
+  font-size: 1.1em;
 }
 
 .retro-button:active {
@@ -139,6 +185,7 @@ html, body, #root {
 
 .retro-button-outline {
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.05);
+  font-family: 'VT323', monospace;
 }
 
 .retro-progress {
@@ -149,71 +196,150 @@ html, body, #root {
   filter: drop-shadow(0 0 4px rgba(130, 87, 229, 0.6));
 }
 
+/* Pixelated Progress Bar */
+.pixel-progress circle {
+  stroke-linecap: butt;
+  stroke-dasharray: 10 2;
+}
+
+.pixel-track {
+  stroke-width: 12px !important;
+  stroke-dasharray: 5 5 !important;
+}
+
+/* Header Styling */
 .retro-header {
-  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.1),
+    rgba(255,255,255,0.1) 10px,
+    rgba(0,0,0,0.05) 10px,
+    rgba(0,0,0,0.05) 20px
+  );
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+  border-bottom: var(--pixel-border);
 }
 
 .dark .retro-header {
-  background: linear-gradient(180deg, rgba(30,30,46,0.95) 0%, rgba(30,30,46,0.85) 100%);
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0,0,0,0.2),
+    rgba(0,0,0,0.2) 10px,
+    rgba(30,30,46,0.3) 10px,
+    rgba(30,30,46,0.3) 20px
+  );
 }
 
+/* Pixelated Slider */
 .retro-slider [role="slider"] {
-  @apply h-5 w-5 bg-white border-2 border-primary transform transition-transform duration-200 hover:scale-110;
-  box-shadow: 0 0 10px rgba(130, 87, 229, 0.5);
+  @apply h-6 w-6 bg-white border-2 border-primary transform transition-transform duration-200 hover:scale-110;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 100%, 0% 100%
+  );
 }
 
 .retro-time-display {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--pixel-bg);
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  font-family: 'VT323', monospace;
+  font-size: 1.2em;
 }
 
 .dark .retro-time-display {
   background: rgba(30, 30, 46, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .retro-input {
-  font-family: 'Space Mono', monospace;
+  font-family: 'VT323', monospace;
+  font-size: 1.2em;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.9),
+    rgba(255,255,255,0.9) 2px,
+    rgba(240,240,240,0.9) 2px,
+    rgba(240,240,240,0.9) 4px
+  );
+}
+
+.dark .retro-input {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(30,30,46,0.9),
+    rgba(30,30,46,0.9) 2px,
+    rgba(20,20,30,0.9) 2px,
+    rgba(20,20,30,0.9) 4px
+  );
 }
 
 .retro-icon {
-  animation: pulse-glow 2s infinite alternate;
+  animation: pixel-pulse 2s steps(2) infinite;
 }
 
 .retro-creator-link {
   position: relative;
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 0;
   transition: all 0.3s ease;
   font-family: 'VT323', monospace;
   letter-spacing: 0.5px;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  border: 2px solid rgba(130, 87, 229, 0.3);
   background: rgba(130, 87, 229, 0.1);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
 }
 
 .retro-creator-link:hover {
   background: rgba(130, 87, 229, 0.2);
-  box-shadow: 0 0 8px rgba(130, 87, 229, 0.5);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  transform: translate(-1px, -1px);
 }
 
 .mode-badge {
   position: relative;
   display: inline-block;
-  animation: blink 1.5s infinite;
+  animation: blink-pixel 1.5s steps(2) infinite;
+  font-family: 'VT323', monospace;
+  font-size: 1.2em;
 }
 
 .retro-theme-toggle {
-  border: 1px dashed rgba(130, 87, 229, 0.3);
-  transition: all 0.3s ease;
+  border: 2px dashed rgba(130, 87, 229, 0.5);
+  transition: all 0.2s ease;
+  border-radius: 0;
 }
 
 .retro-theme-toggle:hover {
   background: rgba(130, 87, 229, 0.1);
-  border-color: rgba(130, 87, 229, 0.6);
+  border-color: rgba(130, 87, 229, 0.8);
+  transform: scale(1.1);
 }
 
-/* Custom animations */
+/* Pixelated animations */
+@keyframes pixel-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes blink-pixel {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Other animations */
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -281,20 +407,34 @@ html, body, #root {
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+  animation: fadeIn 0.5s steps(5) forwards;
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.3s ease-out forwards;
+  animation: scaleIn 0.3s steps(3) forwards;
 }
 
 .animate-slide-in {
-  animation: slideInRight 0.4s ease-out forwards;
+  animation: slideInRight 0.4s steps(4) forwards;
+}
+
+/* Pixel art background pattern */
+.pixel-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(130, 87, 229, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(130, 87, 229, 0.1) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.dark .pixel-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(130, 87, 229, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(130, 87, 229, 0.2) 1px, transparent 1px);
 }
 
 /* Circular progress styles */
 .progress-ring {
-  transition: stroke-dashoffset 0.35s;
+  transition: stroke-dashoffset 0.35s steps(10);
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
 }
@@ -306,11 +446,11 @@ html, body, #root {
 
 /* Transition utilities */
 .transition-all-200 {
-  transition: all 0.2s ease;
+  transition: all 0.2s steps(4);
 }
 
 .transition-all-300 {
-  transition: all 0.3s ease;
+  transition: all 0.3s steps(6);
 }
 
 .focus-button-scale {
@@ -319,5 +459,89 @@ html, body, #root {
 
 /* Custom utilities */
 .text-shadow-sm {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Scan lines effect */
+.scan-lines {
+  position: relative;
+}
+
+.scan-lines::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    rgba(0, 0, 0, 0.1) 1px,
+    rgba(0, 0, 0, 0.1) 2px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.dark .scan-lines::before {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    rgba(255, 255, 255, 0.05) 1px,
+    rgba(255, 255, 255, 0.05) 2px
+  );
+}
+
+/* CRT screen effect */
+.crt-effect {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.crt-effect::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(
+      circle at center,
+      transparent 50%,
+      rgba(0, 0, 0, 0.15) 150%
+    );
+  pointer-events: none;
+}
+
+/* Digital clock font */
+.digital-clock {
+  font-family: 'VT323', monospace;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px rgba(130, 87, 229, 0.8);
+}
+
+/* Pixelated focus buttons */
+.pixel-focus-button {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7em;
+  padding: 0.5em;
+  border: var(--pixel-border);
+  box-shadow: var(--pixel-shadow);
+  transition: all 0.1s ease;
+}
+
+.pixel-focus-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+}
+
+.pixel-focus-button:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
 }

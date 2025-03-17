@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import CircularProgress from './CircularProgress';
-import { Play, Pause, RotateCcw, Clock } from 'lucide-react';
+import { Play, Pause, RotateCcw, Clock, FastForward, Volume2, VolumeX, SkipForward } from 'lucide-react';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
 
@@ -18,7 +18,11 @@ const TimerDisplay: React.FC = () => {
     pauseTimer,
     resetTimer,
     toggleMode,
+    skipTimer,
   } = useTimer();
+  
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [pixelated, setPixelated] = useState(true);
 
   // Format time as mm:ss
   const formatTime = (seconds: number): string => {
@@ -45,11 +49,48 @@ const TimerDisplay: React.FC = () => {
       toast(mode === 'work' ? 'Switched to Break Mode' : 'Switched to Work Mode');
     }
   };
+  
+  // Toggle sound
+  const toggleSound = () => {
+    setSoundEnabled(!soundEnabled);
+    toast(soundEnabled ? 'Sound disabled' : 'Sound enabled');
+  };
+  
+  // Toggle pixel effects
+  const togglePixelEffects = () => {
+    setPixelated(!pixelated);
+    toast(pixelated ? 'Modern mode activated' : 'Retro pixel mode activated');
+  };
 
   return (
     <div className="flex flex-col items-center justify-center">
+      <div className="mb-3 flex gap-2 items-center justify-center">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="text-xs flex items-center gap-1" 
+          onClick={toggleSound}
+        >
+          {soundEnabled ? (
+            <><Volume2 className="h-3 w-3" /> <span className="retro-text">SOUND ON</span></>
+          ) : (
+            <><VolumeX className="h-3 w-3" /> <span className="retro-text">SOUND OFF</span></>
+          )}
+        </Button>
+        
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="text-xs flex items-center gap-1" 
+          onClick={togglePixelEffects}
+        >
+          <FastForward className="h-3 w-3" />
+          <span className="retro-text">{pixelated ? 'PIXELATED' : 'MODERN'}</span>
+        </Button>
+      </div>
+      
       <div 
-        className="relative cursor-pointer transition-all duration-300 hover:scale-105" 
+        className={`relative cursor-pointer transition-all duration-300 hover:scale-105 ${pixelated ? 'crt-effect' : ''}`}
         onClick={handleTimerClick}
         title="Click to toggle between work and break"
       >
@@ -59,9 +100,10 @@ const TimerDisplay: React.FC = () => {
           size={280}
           strokeWidth={8}
           className="drop-shadow-md"
+          pixelated={pixelated}
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="text-5xl font-bold mb-2 font-mono tracking-tight retro-text transition-all duration-200">
+          <div className={`text-5xl font-bold mb-2 transition-all duration-200 ${pixelated ? 'digital-clock' : 'retro-text font-mono tracking-tight'}`}>
             {formatTime(timeLeft)}
           </div>
           <div className="text-sm uppercase tracking-wider text-muted-foreground font-medium flex items-center gap-1">
@@ -77,7 +119,7 @@ const TimerDisplay: React.FC = () => {
             onClick={pauseTimer}
             variant="outline"
             size="icon"
-            className="w-12 h-12 rounded-full focus-button-scale border-2 retro-button-outline"
+            className={`w-12 h-12 rounded-full focus-button-scale ${pixelated ? 'pixel-button !rounded-none' : 'retro-button-outline border-2'}`}
           >
             <Pause className="h-6 w-6" />
           </Button>
@@ -86,7 +128,7 @@ const TimerDisplay: React.FC = () => {
             onClick={startTimer}
             variant="default"
             size="icon"
-            className="w-12 h-12 rounded-full focus-button-scale retro-button"
+            className={`w-12 h-12 rounded-full focus-button-scale ${pixelated ? 'pixel-button !rounded-none' : 'retro-button'}`}
           >
             <Play className="h-6 w-6 ml-0.5" />
           </Button>
@@ -96,9 +138,19 @@ const TimerDisplay: React.FC = () => {
           onClick={resetTimer}
           variant="outline"
           size="icon"
-          className="w-12 h-12 rounded-full focus-button-scale border-2 retro-button-outline"
+          className={`w-12 h-12 rounded-full focus-button-scale ${pixelated ? 'pixel-button !rounded-none' : 'retro-button-outline border-2'}`}
         >
           <RotateCcw className="h-5 w-5" />
+        </Button>
+        
+        <Button
+          onClick={skipTimer}
+          variant="outline"
+          size="icon"
+          className={`w-12 h-12 rounded-full focus-button-scale ${pixelated ? 'pixel-button !rounded-none' : 'retro-button-outline border-2'}`}
+          title="Skip to next phase"
+        >
+          <SkipForward className="h-5 w-5" />
         </Button>
       </div>
     </div>

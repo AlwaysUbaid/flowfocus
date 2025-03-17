@@ -8,6 +8,7 @@ interface CircularProgressProps {
   color?: string;
   backgroundColor?: string;
   className?: string;
+  pixelated?: boolean;
 }
 
 const CircularProgress: React.FC<CircularProgressProps> = ({
@@ -16,7 +17,8 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
   strokeWidth = 10,
   color = 'hsl(var(--primary))',
   backgroundColor = 'hsl(var(--secondary))',
-  className = ''
+  className = '',
+  pixelated = true
 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
@@ -27,7 +29,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
       width={size} 
       height={size} 
       viewBox={`0 0 ${size} ${size}`} 
-      className={`transform -rotate-90 retro-progress ${className}`}
+      className={`transform -rotate-90 retro-progress ${pixelated ? 'pixel-progress' : ''} ${className}`}
     >
       {/* Inner glow effect */}
       <filter id="glow">
@@ -35,10 +37,19 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         <feComposite in="SourceGraphic" in2="blur" operator="over" />
       </filter>
 
+      {/* CRT screen effect */}
+      <filter id="crtEffect">
+        <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="1" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+
       {/* Subtle background pattern */}
       <defs>
         <pattern id="diagonalPattern" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
           <rect width="2" height="8" fill="rgba(255,255,255,0.05)" />
+        </pattern>
+        <pattern id="gridPattern" width="10" height="10" patternUnits="userSpaceOnUse">
+          <rect width="10" height="10" fill="none" stroke="rgba(130, 87, 229, 0.1)" strokeWidth="1" />
         </pattern>
       </defs>
       
@@ -47,7 +58,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         cx={size / 2}
         cy={size / 2}
         r={radius + strokeWidth/2}
-        fill="url(#diagonalPattern)"
+        fill={pixelated ? "url(#gridPattern)" : "url(#diagonalPattern)"}
         className="retro-progress-bg"
       />
 
@@ -71,8 +82,8 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         stroke={backgroundColor}
         strokeOpacity="0.3"
         strokeWidth={strokeWidth - 2}
-        strokeDasharray="4,4"
-        className="retro-progress-track"
+        strokeDasharray={pixelated ? "4,4" : "4,4"}
+        className={`retro-progress-track ${pixelated ? 'pixel-track' : ''}`}
       />
       
       {/* Progress circle */}
@@ -85,7 +96,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         strokeWidth={strokeWidth}
         strokeDasharray={circumference}
         strokeDashoffset={dash}
-        strokeLinecap="round"
+        strokeLinecap={pixelated ? "butt" : "round"}
         filter="url(#glow)"
         className="transition-all duration-300 ease-in-out retro-progress-indicator"
       />
@@ -107,12 +118,25 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
             y2={y2}
             stroke="currentColor"
             strokeOpacity="0.3"
-            strokeWidth="2"
+            strokeWidth={pixelated ? "3" : "2"}
             className="retro-tick"
             transform={`rotate(90, ${size/2}, ${size/2})`}
           />
         );
       })}
+      
+      {/* Pixelated overlay for CRT effect */}
+      {pixelated && (
+        <rect
+          x="0"
+          y="0"
+          width={size}
+          height={size}
+          fill="none"
+          filter="url(#crtEffect)"
+          opacity="0.02"
+        />
+      )}
     </svg>
   );
 };
