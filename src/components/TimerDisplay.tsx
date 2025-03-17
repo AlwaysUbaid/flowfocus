@@ -72,18 +72,12 @@ const TimerDisplay: React.FC = () => {
       
       <div 
         className={`relative cursor-pointer transition-all duration-300 hover:scale-105 ${
-          pixelated ? 'crt-effect retro-tv-frame' : ''
+          pixelated ? 'crt-effect' : ''
         }`}
         onClick={handleTimerClick}
         title="Click to toggle between work and break"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent pointer-events-none rounded-lg"></div>
-        
-        {/* TV Antenna */}
-        <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-24 h-8 flex justify-center">
-          <div className="w-1 h-8 bg-gray-600 transform -rotate-45 origin-bottom"></div>
-          <div className="w-1 h-8 bg-gray-600 transform rotate-45 origin-bottom"></div>
-        </div>
         
         <CircularProgress
           progress={calculateProgress()}
@@ -94,7 +88,6 @@ const TimerDisplay: React.FC = () => {
           pixelated={pixelated}
         />
         
-        {/* TV Screen Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className={`text-5xl font-bold mb-2 transition-all duration-200 ${
             pixelated ? 'digital-clock retro-glow' : 'retro-text font-mono tracking-tight'
@@ -105,12 +98,6 @@ const TimerDisplay: React.FC = () => {
             <Clock className="h-3 w-3 animate-pulse" />
             <span className="mode-badge">{mode === 'work' ? 'Work Mode' : 'Break Mode'}</span>
           </div>
-        </div>
-        
-        {/* TV Knobs */}
-        <div className="absolute -right-6 top-1/4 w-4 h-12 flex flex-col gap-4">
-          <div className="w-4 h-4 rounded-full bg-gray-600"></div>
-          <div className="w-4 h-4 rounded-full bg-gray-600"></div>
         </div>
       </div>
 
