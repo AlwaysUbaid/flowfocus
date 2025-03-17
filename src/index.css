@@ -547,3 +547,22 @@ html, body, #root {
 }
 
 /* Retro switch */
+
+.retro-tv-frame {
+  position: relative;
+  border: 12px solid #333;
+  border-radius: 12px;
+  box-shadow: 
+    0 0 0 4px #555,
+    0 0 20px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(45deg, #222 25%, #333 25%, #333 50%, #222 50%, #222 75%, #333 75%);
+  background-size: 10px 10px;
+}
+
+.retro-glow {
+  text-shadow: 
+    0 0 5px rgba(130, 87, 229, 0.8),
+    0 0 10px rgba(130, 87, 229, 0.6),
+    0 0 15px rgba(130, 87, 229, 0.4);
+}
