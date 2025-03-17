@@ -25,6 +25,7 @@ const Header: React.FC = () => {
           target="_blank" 
           rel="noopener noreferrer"
           className="text-sm text-muted-foreground hover:text-foreground transition-all flex items-center gap-1 retro-creator-link pixel-border !rounded-none py-1 px-2"
+          aria-label="Developed by Ubaid, visit Twitter profile"
         >
           <span className="retro-text">by Ubaid</span>
           <Twitter className="h-3.5 w-3.5" />

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import CircularProgress from './CircularProgress';
@@ -26,16 +27,21 @@ const TimerDisplay: React.FC = () => {
   const [pixelated, setPixelated] = useState(true);
   const tickAudioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Initialize audio element
   useEffect(() => {
-    // Initialize audio
     if (typeof window !== 'undefined') {
-      tickAudioRef.current = new Audio('/tick.mp3');
-      tickAudioRef.current.volume = 0.3;
+      // Create audio element only once
+      if (!tickAudioRef.current) {
+        tickAudioRef.current = new Audio('/tick.mp3');
+        tickAudioRef.current.volume = 0.3;
+      }
     }
 
     return () => {
+      // Cleanup audio on component unmount
       if (tickAudioRef.current) {
         tickAudioRef.current.pause();
+        tickAudioRef.current = null;
       }
     };
   }, []);
@@ -44,16 +50,24 @@ const TimerDisplay: React.FC = () => {
   useEffect(() => {
     let tickInterval: number | undefined;
     
-    if (isRunning && tickingEnabled && tickAudioRef.current) {
+    if (isRunning && tickingEnabled && tickAudioRef.current && soundEnabled) {
       // Play tick immediately on start
-      tickAudioRef.current.currentTime = 0;
-      tickAudioRef.current.play().catch(e => console.log('Audio play failed', e));
+      try {
+        tickAudioRef.current.currentTime = 0;
+        tickAudioRef.current.play().catch(e => console.log('Audio play failed', e));
+      } catch (error) {
+        console.log('Error playing audio:', error);
+      }
       
       // Set interval for subsequent ticks
       tickInterval = window.setInterval(() => {
-        if (tickAudioRef.current) {
-          tickAudioRef.current.currentTime = 0;
-          tickAudioRef.current.play().catch(e => console.log('Audio play failed', e));
+        if (tickAudioRef.current && soundEnabled) {
+          try {
+            tickAudioRef.current.currentTime = 0;
+            tickAudioRef.current.play().catch(e => console.log('Audio play failed', e));
+          } catch (error) {
+            console.log('Error playing audio:', error);
+          }
         }
       }, 1000);
     }
@@ -61,7 +75,7 @@ const TimerDisplay: React.FC = () => {
     return () => {
       if (tickInterval) clearInterval(tickInterval);
     };
-  }, [isRunning, tickingEnabled]);
+  }, [isRunning, tickingEnabled, soundEnabled]);
 
   // Format time as mm:ss
   const formatTime = (seconds: number): string => {
@@ -73,6 +87,7 @@ const TimerDisplay: React.FC = () => {
   // Calculate progress (0 to 1)
   const calculateProgress = (): number => {
     const totalDuration = mode === 'work' ? duration : breakDuration;
+    if (totalDuration === 0) return 0; // Prevent division by zero
     return timeLeft / totalDuration;
   };
 
