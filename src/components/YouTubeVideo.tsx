@@ -206,8 +206,8 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
         ))}
       </div>
 
-      {/* Add custom CSS to add 3D perspective and animations */}
-      <style jsx>{`
+      {/* Add custom CSS for 3D perspective and animations */}
+      <style>{`
         .transform-style-3d {
           transform-style: preserve-3d;
         }
