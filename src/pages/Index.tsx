@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import Header from '../components/Header';
@@ -9,7 +8,6 @@ import InfoPanel from '../components/InfoPanel';
 import FocusRatingDialog from '../components/FocusRatingDialog';
 import YouTubeVideo from '../components/YouTubeVideo';
 import { useIsMobile } from '../hooks/use-mobile';
-import { toast } from 'sonner';
 
 const Index = () => {
   const { timeLeft, mode, isRunning } = useTimer();
@@ -96,13 +94,8 @@ const Index = () => {
               </div>
             </div>
             
-            {/* Update the YouTube Video component with empty initial video source */}
-            <YouTubeVideo 
-              videoSrc="" 
-              title="Focus Music Player" 
-            />
+            <YouTubeVideo videoSrc="" title="Focus Music Player" />
             
-            {/* Show InfoPanel at the bottom on mobile */}
             {isMobile && <InfoPanel />}
           </div>
         </div>
