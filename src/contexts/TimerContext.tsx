@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -31,6 +32,7 @@ interface TimerContextType {
   rateFocus: (rating: FocusRating) => void;
   getNextDuration: (rating: FocusRating) => number;
   continueSession: () => void;
+  toggleMode: () => void;
 }
 
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
@@ -154,6 +156,21 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
   
+  // Toggle between work and break modes
+  const toggleMode = () => {
+    if (isRunning) return; // Don't toggle while timer is running
+    
+    if (mode === 'work') {
+      setMode('break');
+      setTimeLeft(breakDuration);
+      setIsBreak(true);
+    } else {
+      setMode('work');
+      setTimeLeft(duration);
+      setIsBreak(false);
+    }
+  };
+  
   // Handle focus rating
   const rateFocus = (rating: FocusRating) => {
     setFocusRating(rating);
@@ -225,6 +242,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     rateFocus,
     getNextDuration,
     continueSession,
+    toggleMode,
   };
   
   return <TimerContext.Provider value={value}>{children}</TimerContext.Provider>;
