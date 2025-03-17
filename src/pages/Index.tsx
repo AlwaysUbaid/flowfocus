@@ -7,6 +7,7 @@ import DurationSlider from '../components/DurationSlider';
 import StatsPanel from '../components/StatsPanel';
 import InfoPanel from '../components/InfoPanel';
 import FocusRatingDialog from '../components/FocusRatingDialog';
+import YouTubeVideo from '../components/YouTubeVideo';
 import { toast } from 'sonner';
 
 const Index = () => {
@@ -47,7 +48,7 @@ const Index = () => {
       <Header />
       
       <main className="flex-1 container max-w-6xl mx-auto py-8 px-4">
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8">
           <div className="flex flex-col">
             <div className="text-center md:text-left mb-6">
               <h1 className="text-xl font-bold mb-1">Progressive Pomodoro Timer</h1>
@@ -92,6 +93,12 @@ const Index = () => {
                 </div>
               </div>
             </div>
+            
+            {/* Add YouTube Video component */}
+            <YouTubeVideo 
+              videoSrc="https://www.youtube.com/embed/videoseries?si=oSTaTP10TPATYzBt&list=PLVAprBtKkmgNWhZSH2gmVLG83B0f_0Xdx" 
+              title="Focus Music Playlist" 
+            />
           </div>
         </div>
       </main>

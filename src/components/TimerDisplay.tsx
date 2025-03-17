@@ -1,9 +1,9 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import CircularProgress from './CircularProgress';
-import { Play, Pause, RotateCcw, Clock, FastForward, Volume2, VolumeX, SkipForward } from 'lucide-react';
+import { Play, Pause, RotateCcw, Clock, FastForward, Volume2, VolumeX, SkipForward, Volume1 } from 'lucide-react';
 import { Button } from './ui/button';
+import { Switch } from './ui/switch';
 import { toast } from 'sonner';
 
 const TimerDisplay: React.FC = () => {
@@ -22,7 +22,46 @@ const TimerDisplay: React.FC = () => {
   } = useTimer();
   
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [tickingEnabled, setTickingEnabled] = useState(false);
   const [pixelated, setPixelated] = useState(true);
+  const tickAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Initialize audio
+    if (typeof window !== 'undefined') {
+      tickAudioRef.current = new Audio('/tick.mp3');
+      tickAudioRef.current.volume = 0.3;
+    }
+
+    return () => {
+      if (tickAudioRef.current) {
+        tickAudioRef.current.pause();
+      }
+    };
+  }, []);
+
+  // Play tick sound every second when timer is running
+  useEffect(() => {
+    let tickInterval: number | undefined;
+    
+    if (isRunning && tickingEnabled && tickAudioRef.current) {
+      // Play tick immediately on start
+      tickAudioRef.current.currentTime = 0;
+      tickAudioRef.current.play().catch(e => console.log('Audio play failed', e));
+      
+      // Set interval for subsequent ticks
+      tickInterval = window.setInterval(() => {
+        if (tickAudioRef.current) {
+          tickAudioRef.current.currentTime = 0;
+          tickAudioRef.current.play().catch(e => console.log('Audio play failed', e));
+        }
+      }, 1000);
+    }
+    
+    return () => {
+      if (tickInterval) clearInterval(tickInterval);
+    };
+  }, [isRunning, tickingEnabled]);
 
   // Format time as mm:ss
   const formatTime = (seconds: number): string => {
@@ -56,6 +95,12 @@ const TimerDisplay: React.FC = () => {
     toast(soundEnabled ? 'Sound disabled' : 'Sound enabled');
   };
   
+  // Toggle ticking sound
+  const toggleTicking = (enabled: boolean) => {
+    setTickingEnabled(enabled);
+    toast(enabled ? 'Ticking sound enabled' : 'Ticking sound disabled');
+  };
+  
   // Toggle pixel effects
   const togglePixelEffects = () => {
     setPixelated(!pixelated);
@@ -64,7 +109,7 @@ const TimerDisplay: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="mb-3 flex gap-2 items-center justify-center">
+      <div className="mb-3 flex gap-3 items-center justify-center flex-wrap">
         <Button 
           variant="ghost" 
           size="sm" 
@@ -77,6 +122,16 @@ const TimerDisplay: React.FC = () => {
             <><VolumeX className="h-3 w-3" /> <span className="retro-text">SOUND OFF</span></>
           )}
         </Button>
+        
+        <div className="flex items-center gap-2 px-2 py-1 border border-gray-200 dark:border-gray-700 rounded-none bg-background/50">
+          <Volume1 className="h-3 w-3 text-muted-foreground" />
+          <span className="retro-text text-xs">TICK</span>
+          <Switch 
+            checked={tickingEnabled}
+            onCheckedChange={toggleTicking}
+            className="retro-switch data-[state=checked]:bg-primary"
+          />
+        </div>
         
         <Button 
           variant="ghost" 
