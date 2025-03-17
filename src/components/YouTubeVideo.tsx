@@ -1,13 +1,47 @@
-
 import React, { useState } from 'react';
-import { Music, Volume2, Radio, Power, Zap, Tv } from 'lucide-react';
+import { Music, Volume2, Radio, Power, Zap, Tv, Disc, Album } from 'lucide-react';
 import { Input } from './ui/input';
 import { useIsMobile } from '../hooks/use-mobile';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
 
 interface YouTubeVideoProps {
   videoSrc: string;
   title?: string;
 }
+
+// Pre-defined collection of YouTube videos for the DVD rack
+const dvdCollection = [
+  { 
+    id: "jfKfPfyJRdk", 
+    title: "Lofi Hip Hop Radio", 
+    description: "Beats to relax/study to",
+    color: "bg-gradient-to-b from-[#9b87f5] to-[#6E59A5]" 
+  },
+  { 
+    id: "rUxyKA_-grg", 
+    title: "Deep Focus Music", 
+    description: "Concentration & productivity",
+    color: "bg-gradient-to-b from-[#D6BCFA] to-[#8B5CF6]" 
+  },
+  { 
+    id: "lTRiuFIWV54", 
+    title: "Study with Me", 
+    description: "Pomodoro 25/5",
+    color: "bg-gradient-to-b from-[#9B87F5] to-[#7E69AB]" 
+  },
+  { 
+    id: "n61ULEU7CO0", 
+    title: "Nature Sounds", 
+    description: "Forest ambience",
+    color: "bg-gradient-to-b from-[#E5DEFF] to-[#9B87F5]" 
+  },
+  { 
+    id: "mPZkdNFkNps", 
+    title: "Ambient Study Music", 
+    description: "Improve focus & concentration",
+    color: "bg-gradient-to-b from-[#7E69AB] to-[#4E3980]" 
+  }
+];
 
 const YouTubeVideo: React.FC<YouTubeVideoProps> = ({ 
   videoSrc, 
@@ -54,6 +88,13 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
   const handleEjectDvd = () => {
     setIsDvdInserted(false);
     setCurrentVideoSrc('');
+  };
+
+  // Function to play a DVD from the collection
+  const playDvdFromCollection = (videoId: string) => {
+    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    setCurrentVideoSrc(embedUrl);
+    setIsDvdInserted(true);
   };
 
   return (
@@ -153,6 +194,7 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
                 <div className="absolute inset-0 z-15 flex flex-col items-center justify-center text-white/70">
                   <div className="text-base sm:text-xl md:text-2xl retro-text mb-1 sm:mb-2">NO DISC</div>
                   <div className="text-xs sm:text-sm retro-text animate-pulse">Please insert a DVD</div>
+                  <div className="text-xs mt-2 retro-text">or select one from the rack below</div>
                 </div>
               )}
               
@@ -363,6 +405,55 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
         
         {/* DVD Player Shadow */}
         <div className="absolute -z-10 left-2 right-2 -bottom-1 sm:-bottom-1.5 md:-bottom-2 h-3 sm:h-4 md:h-6 blur-xl bg-black/40 rounded-full"></div>
+      </div>
+
+      {/* DVD Rack Component */}
+      <div className="relative mx-auto mt-8 sm:mt-10 md:mt-12 max-w-full">
+        <div className="bg-gradient-to-b from-[#4E3980] to-[#1A1F2C] p-3 sm:p-4 md:p-5 rounded-lg border border-[#6E59A5] shadow-lg">
+          <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-4">
+            <h3 className="font-bold text-sm sm:text-base md:text-lg text-[#D6BCFA] retro-text">DVD COLLECTION</h3>
+            <Disc className="h-4 w-4 sm:h-5 sm:w-5 text-[#9b87f5]" />
+          </div>
+          
+          <Carousel 
+            opts={{
+              align: "start",
+              loop: true
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {dvdCollection.map((dvd, index) => (
+                <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
+                  <div 
+                    className="group cursor-pointer" 
+                    onClick={() => playDvdFromCollection(dvd.id)}
+                  >
+                    {/* DVD Case */}
+                    <div className={`relative h-32 sm:h-40 md:h-48 rounded-md overflow-hidden border-2 border-[#6E59A5] group-hover:border-[#D6BCFA] transition-all duration-300 shadow-md group-hover:shadow-[#8B5CF6]/20 ${dvd.color}`}>
+                      {/* DVD Cover Art */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center p-2 sm:p-3">
+                        <Album className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-white/80 mb-2" />
+                        <div className="text-xs sm:text-sm font-bold text-white text-center line-clamp-1">{dvd.title}</div>
+                        <div className="text-[10px] sm:text-xs text-white/80 text-center line-clamp-2 mt-1">{dvd.description}</div>
+                      </div>
+                      
+                      {/* Reflection/Shine effect */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    
+                    {/* DVD Label */}
+                    <div className="mt-2 text-center">
+                      <p className="text-xs sm:text-sm font-medium text-[#D6BCFA] truncate">{dvd.title}</p>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute left-0 sm:-left-12 md:-left-12 top-1/3 bg-[#6E59A5] hover:bg-[#8B5CF6] text-white" />
+            <CarouselNext className="absolute right-0 sm:-right-12 md:-right-12 top-1/3 bg-[#6E59A5] hover:bg-[#8B5CF6] text-white" />
+          </Carousel>
+        </div>
       </div>
 
       {/* Add custom CSS for 3D perspective and animations */}

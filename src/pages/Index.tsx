@@ -96,7 +96,7 @@ const Index = () => {
               </div>
             </div>
             
-            {/* Add YouTube Video component - updated to use an empty video source initially */}
+            {/* Update the YouTube Video component with empty initial video source */}
             <YouTubeVideo 
               videoSrc="" 
               title="Focus Music Player" 
