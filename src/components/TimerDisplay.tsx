@@ -5,6 +5,7 @@ import CircularProgress from './CircularProgress';
 import { Play, Pause, RotateCcw, Clock, FastForward, SkipForward } from 'lucide-react';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const TimerDisplay: React.FC = () => {
   const {
@@ -22,6 +23,7 @@ const TimerDisplay: React.FC = () => {
   } = useTimer();
   
   const [pixelated, setPixelated] = useState(true);
+  const isMobile = useIsMobile();
 
   // Format time as mm:ss
   const formatTime = (seconds: number): string => {
@@ -56,19 +58,25 @@ const TimerDisplay: React.FC = () => {
     toast(pixelated ? 'Modern mode activated' : 'Retro pixel mode activated');
   };
 
+  // Adjust timer size for mobile
+  const timerSize = isMobile ? 200 : 280;
+  const strokeWidth = isMobile ? 6 : 8;
+
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="mb-3 flex justify-center">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="text-xs flex items-center gap-1" 
-          onClick={togglePixelEffects}
-        >
-          <FastForward className="h-3 w-3" />
-          <span className="retro-text">{pixelated ? 'PIXELATED' : 'MODERN'}</span>
-        </Button>
-      </div>
+      {!isMobile && (
+        <div className="mb-3 flex justify-center">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-xs flex items-center gap-1" 
+            onClick={togglePixelEffects}
+          >
+            <FastForward className="h-3 w-3" />
+            <span className="retro-text">{pixelated ? 'PIXELATED' : 'MODERN'}</span>
+          </Button>
+        </div>
+      )}
       
       <div 
         className={`relative cursor-pointer transition-all duration-300 hover:scale-105 ${
@@ -82,47 +90,47 @@ const TimerDisplay: React.FC = () => {
         <CircularProgress
           progress={calculateProgress()}
           color={getColor()}
-          size={280}
-          strokeWidth={8}
+          size={timerSize}
+          strokeWidth={strokeWidth}
           className="drop-shadow-lg"
           pixelated={pixelated}
         />
         
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className={`text-5xl font-bold mb-2 transition-all duration-200 ${
+          <div className={`${isMobile ? 'text-4xl' : 'text-5xl'} font-bold mb-1 sm:mb-2 transition-all duration-200 ${
             pixelated ? 'digital-clock retro-glow' : 'retro-text font-mono tracking-tight'
           }`}>
             {formatTime(timeLeft)}
           </div>
-          <div className="text-sm uppercase tracking-wider text-muted-foreground font-medium flex items-center gap-1">
+          <div className="text-xs sm:text-sm uppercase tracking-wider text-muted-foreground font-medium flex items-center gap-1">
             <Clock className="h-3 w-3 animate-pulse" />
             <span className="mode-badge">{mode === 'work' ? 'Work Mode' : 'Break Mode'}</span>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-center gap-4 mt-8">
+      <div className="flex items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-8">
         {isRunning ? (
           <Button
             onClick={pauseTimer}
             variant="outline"
             size="icon"
-            className={`w-12 h-12 rounded-full focus-button-scale ${
+            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full focus-button-scale ${
               pixelated ? 'pixel-button !rounded-none' : 'retro-button-outline border-2'
             }`}
           >
-            <Pause className="h-6 w-6" />
+            <Pause className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'}`} />
           </Button>
         ) : (
           <Button
             onClick={startTimer}
             variant="default"
             size="icon"
-            className={`w-12 h-12 rounded-full focus-button-scale ${
+            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full focus-button-scale ${
               pixelated ? 'pixel-button !rounded-none' : 'retro-button'
             }`}
           >
-            <Play className="h-6 w-6 ml-0.5" />
+            <Play className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} ml-0.5`} />
           </Button>
         )}
 
@@ -130,25 +138,39 @@ const TimerDisplay: React.FC = () => {
           onClick={resetTimer}
           variant="outline"
           size="icon"
-          className={`w-12 h-12 rounded-full focus-button-scale ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full focus-button-scale ${
             pixelated ? 'pixel-button !rounded-none' : 'retro-button-outline border-2'
           }`}
         >
-          <RotateCcw className="h-5 w-5" />
+          <RotateCcw className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
         </Button>
         
         <Button
           onClick={skipTimer}
           variant="outline"
           size="icon"
-          className={`w-12 h-12 rounded-full focus-button-scale ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full focus-button-scale ${
             pixelated ? 'pixel-button !rounded-none' : 'retro-button-outline border-2'
           }`}
           title="Skip to next phase"
         >
-          <SkipForward className="h-5 w-5" />
+          <SkipForward className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
         </Button>
       </div>
+      
+      {isMobile && (
+        <div className="mt-2 flex justify-center">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-xs flex items-center gap-1" 
+            onClick={togglePixelEffects}
+          >
+            <FastForward className="h-3 w-3" />
+            <span className="retro-text">{pixelated ? 'PIXELATED' : 'MODERN'}</span>
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
