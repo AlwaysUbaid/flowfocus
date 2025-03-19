@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MoonStar, Sun, Zap, Twitter, Gamepad } from 'lucide-react';
+import { Zap, Twitter, Gamepad } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { Button } from './ui/button';
 import { useIsMobile } from '../hooks/use-mobile';
@@ -8,13 +8,9 @@ import ThemeSelector from './ThemeSelector';
 import { toast } from '../hooks/use-toast';
 
 const Header: React.FC = () => {
-  const { mode, setMode, color } = useTheme();
+  const { color } = useTheme();
   const { isMobile } = useIsMobile();
   
-  const toggleTheme = () => {
-    setMode(mode === 'dark' ? 'light' : 'dark');
-  };
-
   const getThemeClasses = () => {
     const baseClass = "w-full py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 flex items-center justify-between border-b bg-background/90 backdrop-blur-sm sticky top-0 z-10 retro-header scan-lines";
     
@@ -60,19 +56,7 @@ const Header: React.FC = () => {
           </a>
         )}
         
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleTheme}
-          aria-label="Toggle theme"
-          className="retro-theme-toggle h-8 w-8 rounded-full"
-        >
-          {mode === 'dark' ? (
-            <Sun className="h-[1rem] w-[1rem]" />
-          ) : (
-            <MoonStar className="h-[1rem] w-[1rem]" />
-          )}
-        </Button>
+        {/* Removed the standalone light/dark toggle button */}
         
         <ThemeSelector />
         

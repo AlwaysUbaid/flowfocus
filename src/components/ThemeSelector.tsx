@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { MoonStar, Sun, Palette, X, Settings } from 'lucide-react';
+import { MoonStar, Sun, Palette, X, Settings, Circle, Triangle, Square } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { Button } from './ui/button';
 import { 
@@ -33,13 +33,13 @@ const ThemeSelector: React.FC = () => {
   const { isMobile } = useIsMobile();
   const [isThemeDialogOpen, setIsThemeDialogOpen] = useState(false);
 
-  // Color theme options
+  // Color theme options with improved icons
   const colorThemes = [
-    { id: 'default', name: 'Default', color: 'bg-primary' },
-    { id: 'purple', name: 'Purple', color: 'bg-[#8B5CF6]' },
-    { id: 'blue', name: 'Ocean', color: 'bg-[#0EA5E9]' },
-    { id: 'green', name: 'Forest', color: 'bg-[#10B981]' },
-    { id: 'retro', name: 'Retro+', color: 'bg-[#D946EF]' },
+    { id: 'default', name: 'Default', color: 'bg-primary', icon: <Circle className="h-3 w-3" /> },
+    { id: 'purple', name: 'Purple', color: 'bg-[#8B5CF6]', icon: <Circle className="h-3 w-3" /> },
+    { id: 'blue', name: 'Ocean', color: 'bg-[#0EA5E9]', icon: <Circle className="h-3 w-3" /> },
+    { id: 'green', name: 'Forest', color: 'bg-[#10B981]', icon: <Triangle className="h-3 w-3" /> },
+    { id: 'retro', name: 'Retro+', color: 'bg-[#D946EF]', icon: <Square className="h-3 w-3" /> },
   ];
 
   // Mobile theme selector
@@ -53,9 +53,10 @@ const ThemeSelector: React.FC = () => {
                 variant="outline"
                 size="icon"
                 onClick={() => setIsThemeDialogOpen(true)}
-                className="w-8 h-8 rounded-full flex items-center justify-center pixel-border"
+                className="w-8 h-8 rounded-full flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-background to-secondary/40 border-secondary/40 shadow-inner hover:shadow-sm hover:bg-secondary/20 transition-all duration-300"
               >
-                <Palette className="h-4 w-4" />
+                <div className="absolute inset-0 opacity-20 bg-grid-pattern"></div>
+                <Palette className="h-4 w-4 relative z-10 text-primary" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -107,7 +108,9 @@ const ThemeSelector: React.FC = () => {
                       className={`flex items-center space-x-2 border rounded p-2 ${color === theme.id ? 'pixel-border bg-secondary/40' : 'border-muted'}`}
                     >
                       <RadioGroupItem value={theme.id} id={theme.id} className="peer sr-only" />
-                      <div className={`h-4 w-4 rounded-full ${theme.color}`}></div>
+                      <div className={`h-4 w-4 rounded-full ${theme.color} flex items-center justify-center`}>
+                        {theme.icon}
+                      </div>
                       <label 
                         htmlFor={theme.id} 
                         className="retro-text flex-1 cursor-pointer"
@@ -125,7 +128,7 @@ const ThemeSelector: React.FC = () => {
     );
   }
 
-  // Desktop theme selector
+  // Desktop theme selector with improved appearance
   return (
     <DropdownMenu>
       <TooltipProvider>
@@ -135,9 +138,10 @@ const ThemeSelector: React.FC = () => {
               <Button 
                 variant="outline" 
                 size="icon" 
-                className="w-8 h-8 rounded-full pixel-border bg-secondary/20 flex items-center justify-center"
+                className="w-9 h-9 rounded-full relative overflow-hidden bg-gradient-to-br from-background to-secondary/40 border-secondary/40 shadow-inner hover:shadow-sm hover:bg-secondary/20 transition-all duration-300"
               >
-                <Palette className="h-4 w-4" />
+                <div className="absolute inset-0 opacity-20 bg-grid-pattern"></div>
+                <Palette className="h-4 w-4 relative z-10 text-primary" />
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
@@ -179,7 +183,9 @@ const ThemeSelector: React.FC = () => {
               className={`flex items-center cursor-pointer ${color === theme.id ? 'bg-secondary/60' : ''}`}
               onClick={() => setColor(theme.id as any)}
             >
-              <div className={`h-3 w-3 rounded-full mr-2 ${theme.color}`}></div>
+              <div className={`h-4 w-4 rounded-full mr-2 ${theme.color} flex items-center justify-center`}>
+                {theme.icon}
+              </div>
               <span className="retro-text text-xs">{theme.name}</span>
             </DropdownMenuItem>
           ))}
