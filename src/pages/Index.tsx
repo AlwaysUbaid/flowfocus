@@ -107,8 +107,10 @@ const Index = () => {
               <DurationSlider type="work" />
               <DurationSlider type="break" />
               
-              {/* Mobile theme selector */}
-              <ThemeSelector />
+              {/* Mobile theme selector - replaced with icon button */}
+              <div className="flex justify-center mt-3">
+                <ThemeSelector />
+              </div>
             </div>
             
             {/* Music Player - optimized for mobile */}

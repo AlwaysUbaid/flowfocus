@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { MoonStar, Sun, Palette, X } from 'lucide-react';
+import { MoonStar, Sun, Palette, X, Settings } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { Button } from './ui/button';
 import { 
@@ -21,6 +21,12 @@ import {
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 import { useIsMobile } from '../hooks/use-mobile';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip';
 
 const ThemeSelector: React.FC = () => {
   const { mode, setMode, color, setColor } = useTheme();
@@ -40,15 +46,23 @@ const ThemeSelector: React.FC = () => {
   if (isMobile) {
     return (
       <>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsThemeDialogOpen(true)}
-          className="w-full h-12 mt-2 flex items-center justify-center gap-2 pixel-border rounded-none"
-        >
-          <Palette className="h-4 w-4" />
-          <span className="retro-text">Theme Settings</span>
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setIsThemeDialogOpen(true)}
+                className="w-8 h-8 rounded-full flex items-center justify-center pixel-border"
+              >
+                <Palette className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Theme Settings</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
         <Dialog open={isThemeDialogOpen} onOpenChange={setIsThemeDialogOpen}>
           <DialogContent className="sm:max-w-md">
@@ -114,16 +128,24 @@ const ThemeSelector: React.FC = () => {
   // Desktop theme selector
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="pixel-border rounded-none flex items-center gap-1 bg-secondary/20"
-        >
-          <Palette className="h-4 w-4" />
-          <span className="retro-text">Theme</span>
-        </Button>
-      </DropdownMenuTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="w-8 h-8 rounded-full pixel-border bg-secondary/20 flex items-center justify-center"
+              >
+                <Palette className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Theme Settings</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <DropdownMenuContent align="end" className="w-56 pixel-bg">
         <DropdownMenuLabel className="retro-label">Appearance</DropdownMenuLabel>
         <DropdownMenuSeparator />

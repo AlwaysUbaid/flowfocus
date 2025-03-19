@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { MoonStar, Sun, Zap, Twitter, Gamepad, Menu } from 'lucide-react';
+import { MoonStar, Sun, Zap, Twitter, Gamepad } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { Button } from './ui/button';
 import { useIsMobile } from '../hooks/use-mobile';
 import ThemeSelector from './ThemeSelector';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '../hooks/use-toast';
 
 const Header: React.FC = () => {
   const { mode, setMode, color } = useTheme();
@@ -46,7 +46,7 @@ const Header: React.FC = () => {
         )}
       </div>
       
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-2 sm:gap-3">
         {!isMobile && (
           <a 
             href="https://x.com/AlfredAlpino" 
@@ -65,12 +65,12 @@ const Header: React.FC = () => {
           size="icon"
           onClick={toggleTheme}
           aria-label="Toggle theme"
-          className="retro-theme-toggle h-8 w-8 sm:h-9 sm:w-9"
+          className="retro-theme-toggle h-8 w-8 rounded-full"
         >
           {mode === 'dark' ? (
-            <Sun className="h-[1rem] w-[1rem] sm:h-[1.2rem] sm:w-[1.2rem]" />
+            <Sun className="h-[1rem] w-[1rem]" />
           ) : (
-            <MoonStar className="h-[1rem] w-[1rem] sm:h-[1.2rem] sm:w-[1.2rem]" />
+            <MoonStar className="h-[1rem] w-[1rem]" />
           )}
         </Button>
         
@@ -89,7 +89,7 @@ const Header: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            className="hidden md:flex items-center gap-1 pixel-border bg-primary/20 text-primary ml-2 text-xs py-1 rounded-none"
+            className="hidden md:flex items-center gap-1 pixel-border bg-primary/20 text-primary ml-1 text-xs py-1 rounded-none"
           >
             <Gamepad className="h-3.5 w-3.5" />
             <span className="retro-text">RETRO MODE</span>
