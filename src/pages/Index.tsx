@@ -8,6 +8,7 @@ import StatsPanel from '../components/StatsPanel';
 import InfoPanel from '../components/InfoPanel';
 import FocusRatingDialog from '../components/FocusRatingDialog';
 import YouTubeVideo from '../components/YouTubeVideo';
+import ThemeSelector from '../components/ThemeSelector';
 import { useIsMobile } from '../hooks/use-mobile';
 
 const Index = () => {
@@ -65,6 +66,9 @@ const Index = () => {
               </div>
               <DurationSlider type="work" />
               <DurationSlider type="break" />
+              
+              {/* Mobile theme selector */}
+              <ThemeSelector />
             </div>
             
             {/* Stats section - simplified for mobile */}

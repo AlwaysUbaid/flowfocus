@@ -11,32 +11,23 @@
   :root {
     --background: 220 33% 98%;
     --foreground: 224 71.4% 4.1%;
-
     --card: 0 0% 100%;
     --card-foreground: 224 71.4% 4.1%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-
     --primary: 235 85% 65%;
     --primary-foreground: 220 33% 98%;
-
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 220.9 39.3% 11%;
-
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-
     --accent: 220 14.3% 95.9%;
     --accent-foreground: 220.9 39.3% 11%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
-
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 224 71.4% 4.1%;
-
     --radius: 1rem;
     
     /* Custom colors */
@@ -57,31 +48,58 @@
     --pixel-bg: rgba(255, 255, 255, 0.9);
   }
 
+  :root.theme-purple {
+    --primary: 265 84% 61%;
+    --flow: 265 84% 61%;
+    --retro-primary: 270 76% 55%;
+    --retro-secondary: 280 70% 50%;
+    --retro-accent: 290 75% 60%;
+  }
+
+  :root.theme-blue {
+    --primary: 199 89% 48%;
+    --flow: 199 89% 48%;
+    --retro-primary: 210 100% 56%;
+    --retro-secondary: 220 85% 57%;
+    --retro-accent: 200 98% 50%;
+  }
+
+  :root.theme-green {
+    --primary: 158 64% 40%;
+    --flow: 158 64% 40%;
+    --retro-primary: 160 84% 39%;
+    --retro-secondary: 140 59% 45%;
+    --retro-accent: 134 70% 45%;
+  }
+
+  :root.theme-retro {
+    --primary: 311 73% 52%;
+    --flow: 311 73% 52%;
+    --retro-primary: 311 90% 60%;
+    --retro-secondary: 330 88% 66%;
+    --retro-accent: 286 78% 64%;
+    --retro-glow: 0 0 15px rgba(212, 70, 239, 0.8);
+    --pixel-border: 3px solid rgb(40, 40, 40);
+    --pixel-shadow: 5px 5px 0px rgba(0, 0, 0, 0.3);
+  }
+
   .dark {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
-
     --card: 224 71.4% 4.1%;
     --card-foreground: 210 20% 98%;
-
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
-
     --primary: 235 85% 65%;
     --primary-foreground: 210 20% 98%;
-
     --secondary: 215 27.9% 16.9%;
     --secondary-foreground: 210 20% 98%;
-
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
-
     --accent: 215 27.9% 16.9%;
     --accent-foreground: 210 20% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 216 12.2% 83.9%;
@@ -96,6 +114,41 @@
     --pixel-border: 3px solid rgb(100, 100, 100);
     --pixel-shadow: 4px 4px 0px rgba(255, 255, 255, 0.1);
     --pixel-bg: rgba(40, 40, 50, 0.9);
+  }
+
+  .dark.theme-purple {
+    --primary: 265 84% 70%;
+    --flow: 265 84% 70%;
+    --retro-primary: 270 76% 70%;
+    --retro-secondary: 280 70% 65%;
+    --retro-accent: 290 75% 75%;
+  }
+
+  .dark.theme-blue {
+    --primary: 199 89% 70%;
+    --flow: 199 89% 70%;
+    --retro-primary: 210 100% 75%;
+    --retro-secondary: 220 85% 80%;
+    --retro-accent: 200 98% 70%;
+  }
+
+  .dark.theme-green {
+    --primary: 158 64% 55%;
+    --flow: 158 64% 55%;
+    --retro-primary: 160 84% 60%;
+    --retro-secondary: 140 59% 65%;
+    --retro-accent: 134 70% 60%;
+  }
+
+  .dark.theme-retro {
+    --primary: 311 73% 70%;
+    --flow: 311 73% 70%;
+    --retro-primary: 311 90% 75%;
+    --retro-secondary: 330 88% 80%;
+    --retro-accent: 286 78% 75%;
+    --retro-glow: 0 0 20px rgba(212, 70, 239, 0.9);
+    --pixel-border: 3px solid rgb(120, 120, 120);
+    --pixel-shadow: 5px 5px 0px rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -118,6 +171,10 @@ html, body, #root {
   padding: 0;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+}
+
+html, body, * {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
 }
 
 /* Retro theme additions */
@@ -343,16 +400,16 @@ html, body, #root {
     opacity: 1;
   }
   50% {
-    opacity: 0.8;
+    opacity: 0.9;
   }
 }
 
 @keyframes pulse-glow {
   from {
-    filter: drop-shadow(0 0 2px rgba(130, 87, 229, 0.6));
+    filter: drop-shadow(0 0 2px rgba(130, 87, 229, 0.4));
   }
   to {
-    filter: drop-shadow(0 0 8px rgba(130, 87, 229, 0.8));
+    filter: drop-shadow(0 0 6px rgba(130, 87, 229, 0.6));
   }
 }
 
@@ -599,4 +656,46 @@ html, body, #root {
     transform: translateY(calc(var(--random-position) + 50px));
     opacity: 0;
   }
+}
+
+/* Theme transition */
+.theme-transition {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced theme colors for specific components */
+.theme-purple .retro-creator-link {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.theme-purple .retro-creator-link:hover {
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.theme-blue .retro-creator-link {
+  border-color: rgba(14, 165, 233, 0.3);
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.theme-blue .retro-creator-link:hover {
+  background: rgba(14, 165, 233, 0.2);
+}
+
+.theme-green .retro-creator-link {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.theme-green .retro-creator-link:hover {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.theme-retro .retro-creator-link {
+  border-color: rgba(217, 70, 239, 0.3);
+  background: rgba(217, 70, 239, 0.1);
+}
+
+.theme-retro .retro-creator-link:hover {
+  background: rgba(217, 70, 239, 0.2);
 }

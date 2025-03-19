@@ -4,9 +4,10 @@ import { MoonStar, Sun, Zap, Twitter, Gamepad, Menu } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { Button } from './ui/button';
 import { useIsMobile } from '../hooks/use-mobile';
+import ThemeSelector from './ThemeSelector';
 
 const Header: React.FC = () => {
-  const { theme, setTheme } = useTheme();
+  const { mode, setMode } = useTheme();
   const { isMobile } = useIsMobile();
 
   return (
@@ -40,16 +41,18 @@ const Header: React.FC = () => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
           aria-label="Toggle theme"
           className="retro-theme-toggle h-8 w-8 sm:h-9 sm:w-9"
         >
-          {theme === 'dark' ? (
+          {mode === 'dark' ? (
             <Sun className="h-[1rem] w-[1rem] sm:h-[1.2rem] sm:w-[1.2rem]" />
           ) : (
             <MoonStar className="h-[1rem] w-[1rem] sm:h-[1.2rem] sm:w-[1.2rem]" />
           )}
         </Button>
+        
+        <ThemeSelector />
         
         {isMobile ? (
           <Button
