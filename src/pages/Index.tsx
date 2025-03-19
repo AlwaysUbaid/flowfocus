@@ -181,11 +181,11 @@ const Index = () => {
                 <div className="mt-4 flex items-center justify-between text-xs">
                   <div>
                     <span className="text-muted-foreground mr-1">Total:</span>
-                    <span className="font-medium">{formatTime(weeklyFocusTime.reduce((a, b) => a + b, 0))}</span>
+                    <span className="font-medium">{formatTime(Array.isArray(weeklyFocusTime) ? weeklyFocusTime.reduce((a, b) => a + b, 0) : weeklyFocusTime)}</span>
                   </div>
                   <div>
                     <span className="text-muted-foreground mr-1">Today:</span>
-                    <span className="font-medium">{formatTime(weeklyFocusTime[6])}</span>
+                    <span className="font-medium">{formatTime(Array.isArray(weeklyFocusTime) && weeklyFocusTime.length > 0 ? weeklyFocusTime[6] : 0)}</span>
                   </div>
                 </div>
               </div>
