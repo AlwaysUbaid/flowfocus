@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Info, Timer, Star, Play, SkipForward, HelpCircle } from 'lucide-react';
+import { Info, Timer, Star, Play, SkipForward, HelpCircle, Save } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -94,6 +94,13 @@ const InfoPanel: React.FC = () => {
               <Play className={`h-4 w-4 ${getIconColor()} mt-0.5 flex-shrink-0`} />
               <div>
                 <span className="font-medium">Adjust</span> - Gradually increase your focus periods as your concentration builds.
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3 border-l-2 border-primary pl-3 py-1">
+              <Save className={`h-4 w-4 ${getIconColor()} mt-0.5 flex-shrink-0`} />
+              <div>
+                <span className="font-medium">Data storage</span> - All your focus statistics are automatically saved in your browser's local storage.
               </div>
             </div>
             
