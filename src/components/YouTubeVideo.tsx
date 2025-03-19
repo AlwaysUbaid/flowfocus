@@ -11,35 +11,35 @@ interface YouTubeVideoProps {
   title?: string;
 }
 
-// Pre-defined playlist of YouTube videos
+// Pre-defined playlist of YouTube videos with actual YouTube titles
 const videoPlaylist = [
   { 
     id: "Fxv6LgHgMy0", 
-    title: "Fantasy Music", 
+    title: "Fantasy Music - Daydream Mix", 
     description: "Magical instrumental soundtrack",
     color: "bg-gradient-to-b from-[#9b87f5] to-[#6E59A5]" 
   },
   { 
     id: "KaGEVNdPcyc", 
-    title: "Epic Fantasy", 
+    title: "Epic Fantasy Music", 
     description: "Adventure & relaxation music",
     color: "bg-gradient-to-b from-[#D6BCFA] to-[#8B5CF6]" 
   },
   { 
     id: "iPzmBKQVcjo", 
-    title: "Medieval Fantasy", 
+    title: "Medieval Fantasy Music", 
     description: "Celtic & fantasy soundtrack",
     color: "bg-gradient-to-b from-[#9B87F5] to-[#7E69AB]" 
   },
   { 
     id: "_MZb0Xbzz7Y", 
-    title: "Celtic Fantasy", 
+    title: "Celtic Fantasy Music", 
     description: "Mystical Celtic music",
     color: "bg-gradient-to-b from-[#E5DEFF] to-[#9B87F5]" 
   },
   { 
     id: "kyZZeS6nsFw", 
-    title: "Fantasy Epic", 
+    title: "Fantasy Music - Magical Worlds", 
     description: "Mystical instrumental soundtrack",
     color: "bg-gradient-to-b from-[#7E69AB] to-[#4E3980]" 
   }
