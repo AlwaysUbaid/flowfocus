@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Music, Album, Disc } from 'lucide-react';
+import { Music, Album, Disc, Power } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useIsMobile } from '../hooks/use-mobile';
@@ -55,7 +55,7 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
   const [currentVideoSrc, setCurrentVideoSrc] = useState(videoSrc || `https://www.youtube.com/embed/${videoPlaylist[0].id}`);
   const [customVideoUrl, setCustomVideoUrl] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
   const { color, mode } = useTheme();
 
   // Get theme-specific colors
@@ -140,167 +140,83 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
     setCurrentVideoSrc(embedUrl);
   };
 
-  // Update TV style when theme changes
-  useEffect(() => {
-    // For any side-effects when theme changes
-  }, [color, mode]);
-
   return (
     <div className="w-full max-w-full overflow-hidden">
-      {/* TV Container */}
-      <div className={`relative 
-                    mx-auto
-                    border-[15px] sm:border-[20px] md:border-[25px] 
-                    rounded-xl 
-                    shadow-[6px_8px_0px_0px_rgba(0,0,0,0.5)] sm:shadow-[8px_12px_0px_0px_rgba(0,0,0,0.5)] md:shadow-[12px_15px_0px_0px_rgba(0,0,0,0.5)]
-                    dark:shadow-[12px_15px_0px_0px_rgba(0,0,0,0.7)]
-                    pt-4
-                    transition-all duration-500 
-                    hover:translate-y-[-4px] sm:hover:translate-y-[-6px] md:hover:translate-y-[-8px] 
-                    transform-style-preserve-3d
-                    w-full max-w-full sm:max-w-[95%] md:max-w-3xl
-                    bg-gradient-to-b`}
-           style={{
-             borderColor: themeColors.border,
-             background: `linear-gradient(to bottom, ${themeColors.primary}, ${themeColors.secondary})`
-           }}
+      {/* Modern TV Container */}
+      <div 
+        className="relative rounded-xl overflow-hidden shadow-lg mx-auto w-full transition-all duration-300 hover:translate-y-[-4px]"
+        style={{
+          background: `linear-gradient(to bottom, ${themeColors.primary}80, ${themeColors.secondary}80)`
+        }}
       >
-      
-        {/* TV Top Panel with buttons */}
-        <div className="flex items-center justify-between mb-2 px-2 sm:px-3 md:px-5 py-1 sm:py-2 
-                      bg-[#111111] dark:bg-[#0A0A0A] 
-                      border-b-2 sm:border-b-3 md:border-b-4 border-[#000000]
-                      shadow-[inset_0px_2px_5px_rgba(255,255,255,0.1)]">
-          <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
-            <h3 className="font-bold text-sm sm:text-base md:text-xl text-transparent bg-clip-text"
-                style={{ 
-                  backgroundImage: `linear-gradient(to right, ${themeColors.highlight}, ${themeColors.primary})` 
-                }}>
+        {/* TV Top Panel */}
+        <div className="flex items-center justify-between p-2 sm:p-3 bg-black/80 border-b border-black/20">
+          <div className="flex items-center gap-2">
+            <h3 className="font-bold text-sm sm:text-base text-white">
               FOCUS MUSIC
             </h3>
-            <div className="h-1 w-1 sm:h-1.5 sm:w-1.5 md:h-2 md:w-2 rounded-full animate-pulse"
+            <div className="h-1.5 w-1.5 rounded-full animate-pulse"
                  style={{ backgroundColor: themeColors.highlight }}></div>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-            <button 
-              onClick={() => setIsPowered(!isPowered)} 
-              className="flex items-center justify-center h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 
-                        bg-gradient-to-b from-[#333] to-[#111] 
-                        border-2 border-[#444] rounded-md 
-                        hover:from-[#444] hover:to-[#222]
-                        shadow-[0_2px_4px_rgba(0,0,0,0.5)]
-                        active:translate-y-[1px]
-                        active:shadow-none
-                        transition-all duration-150"
-            >
-              <div className={`h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 rounded-full ${isPowered ? 'bg-[#E5DEFF]' : ''} shadow-[0_0_5px_rgba(139,92,246,0.8)]`}
-                   style={{ backgroundColor: isPowered ? themeColors.highlight : themeColors.primary }}></div>
-            </button>
-          </div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsPowered(!isPowered)}
+            className="h-6 w-6 sm:h-7 sm:w-7 rounded-full"
+            style={{ backgroundColor: isPowered ? themeColors.primary + '30' : 'transparent' }}
+          >
+            <Power className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+          </Button>
         </div>
         
         {/* TV Screen */}
-        <div className="relative overflow-hidden 
-                      border-[8px] sm:border-[12px] md:border-[16px] border-[#111111] 
-                      bg-black rounded-md
-                      shadow-[inset_0px_0px_30px_rgba(0,0,0,0.8)]">
-          {/* Screen with CRT effect */}
-          <div className="relative pt-[56.25%] 
-                        scan-lines 
-                        after:content-['']
-                        after:absolute
-                        after:inset-0
-                        after:bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.5)_100%)]">
-            {/* CRT curved corners */}
-            <div className="absolute inset-0 pointer-events-none z-20">
-              <div className="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-black opacity-50 rounded-br-[50px] sm:rounded-br-[75px] md:rounded-br-[100px]"></div>
-              <div className="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-black opacity-50 rounded-bl-[50px] sm:rounded-bl-[75px] md:rounded-bl-[100px]"></div>
-              <div className="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-black opacity-50 rounded-tr-[50px] sm:rounded-tr-[75px] md:rounded-tr-[100px]"></div>
-              <div className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-black opacity-50 rounded-tl-[50px] sm:rounded-tl-[75px] md:rounded-tl-[100px]"></div>
+        <div className="relative bg-black overflow-hidden aspect-video">
+          {/* Actual video iframe */}
+          <iframe 
+            className={`absolute inset-0 w-full h-full border-none z-10 transition-all duration-500 ${isPowered ? 'opacity-100' : 'opacity-0'}`}
+            src={isPowered ? currentVideoSrc : ''}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+          ></iframe>
+          
+          {/* Power off screen */}
+          {!isPowered && (
+            <div className="absolute inset-0 z-20 bg-black overflow-hidden flex items-center justify-center">
+              <div className="h-1 w-20 sm:w-30 md:w-40 bg-white/20 absolute top-1/2 left-1/2 -translate-x-1/2 animate-pulse"></div>
             </div>
+          )}
+          
+          {/* Subtle screen effects */}
+          <div className="absolute inset-0 pointer-events-none z-20 opacity-30">
+            {/* Subtle scan lines */}
+            <div className="absolute inset-0 bg-scanline opacity-10"></div>
             
-            {/* Actual video iframe */}
-            <iframe 
-              className={`absolute inset-0 w-full h-full border-none z-10 transition-all duration-500 ${isPowered ? 'opacity-100' : 'opacity-0'}`}
-              src={isPowered ? currentVideoSrc : ''}
-              title={title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-              onPlay={() => setIsPlaying(true)}
-              onPause={() => setIsPlaying(false)}
-            ></iframe>
-            
-            {/* Power off screen with scanlines and static */}
-            {!isPowered && (
-              <div className="absolute inset-0 z-20 bg-black overflow-hidden">
-                <div className="absolute inset-0 bg-noise opacity-10"></div>
-                <div className="h-1 w-20 sm:w-30 md:w-40 bg-white/20 absolute top-1/2 left-1/2 -translate-x-1/2 animate-pulse"></div>
-                
-                {/* Static dots */}
-                {Array.from({ length: 20 }).map((_, i) => (
-                  <div 
-                    key={i} 
-                    className="absolute bg-white/30 rounded-full"
-                    style={{
-                      width: `${Math.random() * 3 + 1}px`,
-                      height: `${Math.random() * 3 + 1}px`,
-                      top: `${Math.random() * 100}%`,
-                      left: `${Math.random() * 100}%`,
-                      opacity: Math.random() * 0.5 + 0.1,
-                    }}
-                  ></div>
-                ))}
-              </div>
-            )}
-            
-            {/* Screen overlay effects */}
-            <div className="absolute inset-0 pointer-events-none z-20">
-              {/* Scan lines */}
-              <div className="absolute inset-0 bg-scanline opacity-20"></div>
-              
-              {/* Static noise - reduced opacity */}
-              <div className="absolute inset-0 bg-noise opacity-5 mix-blend-overlay"></div>
-              
-              {/* Screen glare/reflection - reduced */}
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.08),transparent_80%)]"></div>
-              
-              {/* Color distortion at edges - changed to match theme color */}
-              <div className="absolute inset-0 opacity-8" style={{
-                background: `linear-gradient(to right, ${themeColors.primary}80 0%, transparent 5%, transparent 95%, ${themeColors.secondary}80 100%)`
-              }}></div>
-              
-              {/* VHS tracking lines */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="w-full h-[1px] sm:h-[1.5px] md:h-[2px] bg-white/20 absolute opacity-0 tracking-line"></div>
-                <div className="w-full h-[1.5px] sm:h-[2px] md:h-[3px] bg-white/10 absolute opacity-0 tracking-line" style={{"--random-delay": "3", "--random-position": "200px"} as React.CSSProperties}></div>
-              </div>
-            </div>
+            {/* Subtle glare/reflection */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.05),transparent_80%)]"></div>
           </div>
         </div>
         
-        {/* TV Bottom panel with controls */}
-        <div className="flex items-center justify-between px-2 sm:px-3 md:px-5 py-2 sm:py-2.5 md:py-3 
-                      bg-gradient-to-b from-[#222222] to-[#111111] dark:from-[#1A1A1A] dark:to-[#000000]
-                      border-t-2 sm:border-t-3 md:border-t-4 border-[#000000]">
+        {/* TV Bottom panel with minimal controls */}
+        <div className="flex items-center justify-between p-2 sm:p-3 bg-black/90">
           {/* TV Brand */}
-          <div className="text-xs sm:text-sm font-bold tracking-widest drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)]"
-               style={{ color: themeColors.highlight }}>
+          <div className="text-xs sm:text-sm font-bold tracking-widest text-white/80">
             FLOWTRON
           </div>
           
-          {/* Control knobs */}
-          <div className="flex gap-2 sm:gap-3 md:gap-4">
-            {[1, 2, 3].map((_, index) => (
-              !isMobile || index < 2 ? (
-                <div 
-                  key={index}
-                  className="w-2.5 h-2.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full border border-[#222] sm:border-2 md:border-2 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]"
-                  style={{
-                    background: `linear-gradient(to bottom, ${themeColors.primary}, ${themeColors.secondary})`
-                  }}
-                ></div>
-              ) : null
+          {/* Minimal control dots */}
+          <div className="flex gap-2 sm:gap-3">
+            {[1, 2].map((_, index) => (
+              <div 
+                key={index}
+                className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full"
+                style={{
+                  backgroundColor: index === 0 ? themeColors.highlight : themeColors.primary
+                }}
+              ></div>
             ))}
           </div>
         </div>
@@ -403,49 +319,6 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
       {/* Add custom CSS for effects */}
       <style>
         {`
-        .transform-style-preserve-3d {
-          transform-style: preserve-3d;
-        }
-        
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0) translateX(0);
-          }
-          50% {
-            transform: translateY(-20px) translateX(10px);
-          }
-        }
-        
-        .animate-float {
-          animation: float linear infinite;
-        }
-        
-        @keyframes trackingLine {
-          0% {
-            opacity: 0;
-            top: -10px;
-          }
-          10% {
-            opacity: 0.3;
-          }
-          50% {
-            opacity: 0.1;
-          }
-          90% {
-            opacity: 0.3;
-          }
-          100% {
-            opacity: 0;
-            top: 110%;
-          }
-        }
-        
-        .tracking-line {
-          animation: trackingLine 10s linear infinite;
-          animation-delay: calc(var(--random-delay, 0) * 1s);
-          top: calc(var(--random-position, 0px) * 1);
-        }
-        
         .bg-scanline {
           background-image: repeating-linear-gradient(
             to bottom,

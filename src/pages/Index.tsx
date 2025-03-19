@@ -99,10 +99,11 @@ const Index = () => {
             
             {/* Controls section */}
             <div className="bg-card/60 backdrop-blur-sm rounded-xl p-3 border shadow-sm animate-fade-in">
-              <div className="text-center mb-2">
+              <div className="text-center mb-2 flex items-center justify-center gap-1">
                 <h1 className="text-base font-bold">Progressive Pomodoro</h1>
-                <p className="text-xs text-muted-foreground">Start small, build momentum</p>
+                <InfoPanel />
               </div>
+              <p className="text-xs text-muted-foreground text-center mb-2">Start small, build momentum</p>
               <DurationSlider type="work" />
               <DurationSlider type="break" />
               
@@ -110,23 +111,24 @@ const Index = () => {
               <ThemeSelector />
             </div>
             
-            {/* Stats section - simplified for mobile */}
-            <StatsPanel />
-            
             {/* Music Player - optimized for mobile */}
             <YouTubeVideo videoSrc="" title="Focus Music Player" />
             
-            {/* Info panel moved to header with "?" icon */}
+            {/* Stats section - simplified for mobile */}
+            <StatsPanel />
           </div>
         ) : (
           // Desktop layout - centered timer with controls and TV above
           <div className="grid lg:grid-cols-2 gap-6 pt-4">
             <div className="flex flex-col">
-              <div className="text-center md:text-left mb-4 md:mb-5 animate-fade-in">
-                <h1 className="text-lg sm:text-xl font-bold mb-1">Progressive Pomodoro Timer</h1>
-                <p className="text-muted-foreground text-xs sm:text-sm">
-                  Start small, build momentum, achieve flow.
-                </p>
+              <div className="text-center md:text-left mb-4 md:mb-5 animate-fade-in flex items-center justify-between">
+                <div>
+                  <h1 className="text-lg sm:text-xl font-bold mb-1">Progressive Pomodoro Timer</h1>
+                  <p className="text-muted-foreground text-xs sm:text-sm">
+                    Start small, build momentum, achieve flow.
+                  </p>
+                </div>
+                <InfoPanel />
               </div>
               
               <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 md:p-6 border shadow-sm mb-5 animate-scale-in">
