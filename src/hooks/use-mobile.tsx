@@ -3,26 +3,33 @@ import * as React from "react"
 
 // Using standard breakpoints
 const MOBILE_BREAKPOINT = 768
+const TABLET_BREAKPOINT = 1024
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
-  const [width, setWidth] = React.useState<number | undefined>(undefined)
+  const [screenSize, setScreenSize] = React.useState({
+    isMobile: false,
+    isTablet: false,
+    width: 0
+  })
 
   React.useEffect(() => {
-    const checkIfMobile = () => {
+    const checkScreenSize = () => {
       const currentWidth = window.innerWidth
-      setWidth(currentWidth)
-      setIsMobile(currentWidth < MOBILE_BREAKPOINT)
+      setScreenSize({
+        isMobile: currentWidth < MOBILE_BREAKPOINT,
+        isTablet: currentWidth >= MOBILE_BREAKPOINT && currentWidth < TABLET_BREAKPOINT,
+        width: currentWidth
+      })
     }
     
     // Initial check
-    checkIfMobile()
+    checkScreenSize()
     
     // Add event listener for resize with debounce for performance
     let timeoutId: ReturnType<typeof setTimeout>
     const handleResize = () => {
       clearTimeout(timeoutId)
-      timeoutId = setTimeout(checkIfMobile, 100)
+      timeoutId = setTimeout(checkScreenSize, 100)
     }
     
     window.addEventListener("resize", handleResize)
@@ -34,6 +41,5 @@ export function useIsMobile() {
     }
   }, [])
 
-  // We can also provide current width for more fine-grained control
-  return { isMobile: !!isMobile, width: width || 0 }
+  return screenSize
 }
