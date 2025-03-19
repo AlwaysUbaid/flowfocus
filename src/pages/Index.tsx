@@ -92,8 +92,8 @@ const Index = () => {
         {/* Mobile: Full screen timer layout */}
         {isMobile ? (
           <div className="flex flex-col space-y-4 mb-16"> {/* Added bottom margin for fixed footer */}
-            {/* Timer section - full screen on mobile */}
-            <div className="flex justify-center items-center min-h-[40vh] -mt-2 mb-1">
+            {/* Timer section - full screen on mobile with larger size */}
+            <div className="flex justify-center items-center min-h-[45vh] -mt-2 mb-1">
               <TimerDisplay />
             </div>
             
@@ -107,7 +107,7 @@ const Index = () => {
               <DurationSlider type="work" />
               <DurationSlider type="break" />
               
-              {/* Mobile theme selector - replaced with icon button */}
+              {/* Mobile theme selector - small icon */}
               <div className="flex justify-center mt-3">
                 <ThemeSelector />
               </div>
@@ -133,7 +133,7 @@ const Index = () => {
                 <InfoPanel />
               </div>
               
-              <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 md:p-6 border shadow-sm mb-5 animate-scale-in">
+              <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 md:p-6 border shadow-md mb-5 animate-scale-in">
                 <div className="flex justify-center mb-5">
                   <TimerDisplay />
                 </div>
@@ -150,12 +150,12 @@ const Index = () => {
             </div>
             
             <div className="flex flex-col space-y-5 md:space-y-6">
-              {/* Retro TV above */}
+              {/* Enhanced TV component */}
               <div className="animate-fade-in">
                 <YouTubeVideo videoSrc="" title="Focus Music Player" />
               </div>
               
-              <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 md:p-5 border animate-fade-in">
+              <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 md:p-5 border animate-fade-in shadow-md">
                 <div className="flex items-center justify-between mb-3 md:mb-4">
                   <h3 className="font-semibold text-sm sm:text-base flex items-center gap-2">
                     <BarChart2 className={`h-4 w-4 ${getIconColor()}`} />
@@ -167,7 +167,8 @@ const Index = () => {
                 <div className="flex items-end justify-between h-[120px] px-2">
                   {getDayNames().map((day, index) => {
                     // Generate random heights for bars (in a real app, this would use actual data)
-                    const percentage = (weeklyFocusTime[index] / 3600) * 5; // Scale hours to percentage
+                    const percentage = (Array.isArray(weeklyFocusTime) && weeklyFocusTime[index] ? 
+                      (weeklyFocusTime[index] / 3600) * 5 : 0); // Scale hours to percentage
                     const height = Math.max(5, Math.min(100, percentage)); // Min 5%, max 100%
                     
                     return (
@@ -185,7 +186,7 @@ const Index = () => {
                 <div className="mt-4 flex items-center justify-between text-xs">
                   <div>
                     <span className="text-muted-foreground mr-1">Total:</span>
-                    <span className="font-medium">{formatTime(Array.isArray(weeklyFocusTime) ? weeklyFocusTime.reduce((a, b) => a + b, 0) : weeklyFocusTime)}</span>
+                    <span className="font-medium">{formatTime(Array.isArray(weeklyFocusTime) ? weeklyFocusTime.reduce((a, b) => a + b, 0) : 0)}</span>
                   </div>
                   <div>
                     <span className="text-muted-foreground mr-1">Today:</span>

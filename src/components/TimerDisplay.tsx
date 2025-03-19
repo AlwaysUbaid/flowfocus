@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import CircularProgress from './CircularProgress';
@@ -83,39 +84,41 @@ const TimerDisplay: React.FC = () => {
     setShowPresets(!showPresets);
   };
 
-  let timerSize = 280;
+  // Adjust timer size based on screen size
+  // Increase mobile size significantly
+  let timerSize = 300; // Larger default for desktop
   let strokeWidth = 8;
   
   if (isMobile) {
-    timerSize = 240;
-    strokeWidth = 6;
+    timerSize = 280; // Increased from 240 for mobile
+    strokeWidth = 8; // Increased from 6 for better visibility
   } else if (isTablet) {
-    timerSize = 260;
-    strokeWidth = 7;
+    timerSize = 290; // Slightly larger for tablets
+    strokeWidth = 8;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center mt-2">
       <div 
-        className={`relative cursor-pointer transition-all duration-300 hover:scale-105 ${
+        className={`relative cursor-pointer transition-all duration-300 hover:scale-102 ${
           pulseEffect ? 'animate-pulse' : ''
-        } ${pixelated ? 'crt-effect' : ''}`}
+        } ${pixelated ? 'crt-effect' : ''} timer-container`}
         onClick={handleTimerClick}
         title="Click to toggle between work and break"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent pointer-events-none rounded-lg"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none rounded-full"></div>
         
         <CircularProgress
           progress={calculateProgress()}
           color={getColor()}
           size={timerSize}
           strokeWidth={strokeWidth}
-          className={`drop-shadow-lg ${pulseEffect ? 'animate-pulse' : ''}`}
+          className={`drop-shadow-xl ${pulseEffect ? 'animate-pulse' : ''}`}
           pixelated={pixelated}
         />
         
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className={`text-5xl font-bold mb-1 sm:mb-2 transition-all duration-300 ${
+          <div className={`text-4xl sm:text-5xl font-bold mb-1 sm:mb-2 transition-all duration-300 ${
             pixelated ? 'digital-clock retro-glow' : 'retro-text font-mono tracking-tight'
           }`}>
             {formatTime(timeLeft)}
@@ -133,19 +136,19 @@ const TimerDisplay: React.FC = () => {
           }}
           variant="ghost"
           size="icon"
-          className="absolute top-0 right-0 h-8 w-8 rounded-full opacity-70 hover:opacity-100 transition-opacity"
+          className="absolute top-2 right-2 h-8 w-8 rounded-full opacity-70 hover:opacity-100 transition-opacity bg-background/40 backdrop-blur-sm"
         >
           <Settings className="h-4 w-4" />
         </Button>
       </div>
 
-      <div className="flex items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-6">
+      <div className="flex items-center justify-center gap-4 sm:gap-5 mt-6 sm:mt-8">
         {isRunning ? (
           <Button
             onClick={pauseTimer}
             variant="outline"
             size="icon"
-            className={`w-12 h-12 rounded-full focus-button-scale ${
+            className={`w-14 h-14 rounded-full focus-button-scale shadow-md ${
               pixelated ? 'pixel-button !rounded-none' : 'retro-button-outline border-2'
             }`}
           >
@@ -156,7 +159,7 @@ const TimerDisplay: React.FC = () => {
             onClick={startTimer}
             variant="default"
             size="icon"
-            className={`w-12 h-12 rounded-full focus-button-scale ${
+            className={`w-14 h-14 rounded-full focus-button-scale shadow-md ${
               pixelated ? 'pixel-button !rounded-none' : 'retro-button'
             }`}
           >
@@ -188,11 +191,11 @@ const TimerDisplay: React.FC = () => {
         </Button>
       </div>
       
-      <div className="mt-3 flex justify-center">
+      <div className="mt-4 flex justify-center">
         <Button 
           variant="ghost" 
           size="sm" 
-          className="text-xs flex items-center gap-1" 
+          className="text-xs flex items-center gap-1 bg-primary/10 hover:bg-primary/20 transition-all" 
           onClick={togglePixelEffects}
         >
           <FastForward className="h-3 w-3" />
@@ -201,10 +204,10 @@ const TimerDisplay: React.FC = () => {
       </div>
       
       {showPresets && (
-        <div className={`mt-4 bg-background/80 backdrop-blur-md rounded-lg p-3 border animate-fade-in ${pixelated ? 'pixel-border' : ''}`}>
+        <div className={`mt-4 bg-background/90 backdrop-blur-md rounded-lg p-3 border animate-fade-in shadow-md ${pixelated ? 'pixel-border' : ''}`}>
           <div className="flex flex-col space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-xs retro-text">Quick presets:</span>
+              <span className="text-xs retro-text font-semibold">Quick presets:</span>
               <Zap className="h-3 w-3 text-primary" />
             </div>
             <div className="grid grid-cols-4 gap-2">
@@ -214,7 +217,7 @@ const TimerDisplay: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => applyPreset(preset.value)}
-                  className={`text-xs ${pixelated ? 'pixel-button h-8' : 'h-8'}`}
+                  className={`text-xs ${pixelated ? 'pixel-button h-8' : 'h-8'} hover:bg-primary/20 hover:text-primary font-medium`}
                 >
                   {preset.label}
                 </Button>
