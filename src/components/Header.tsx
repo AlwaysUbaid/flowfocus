@@ -5,13 +5,35 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Button } from './ui/button';
 import { useIsMobile } from '../hooks/use-mobile';
 import ThemeSelector from './ThemeSelector';
+import { toast } from '@/hooks/use-toast';
 
 const Header: React.FC = () => {
-  const { mode, setMode } = useTheme();
+  const { mode, setMode, color } = useTheme();
   const { isMobile } = useIsMobile();
+  
+  const toggleTheme = () => {
+    setMode(mode === 'dark' ? 'light' : 'dark');
+  };
+
+  const getThemeClasses = () => {
+    const baseClass = "w-full py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 flex items-center justify-between border-b bg-background/90 backdrop-blur-sm sticky top-0 z-10 retro-header scan-lines";
+    
+    switch (color) {
+      case 'purple':
+        return `${baseClass} theme-purple-header`;
+      case 'blue':
+        return `${baseClass} theme-blue-header`;
+      case 'green':
+        return `${baseClass} theme-green-header`;
+      case 'retro':
+        return `${baseClass} theme-retro-header`;
+      default:
+        return baseClass;
+    }
+  };
 
   return (
-    <header className="w-full py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 flex items-center justify-between border-b bg-background/90 backdrop-blur-sm sticky top-0 z-10 retro-header scan-lines">
+    <header className={getThemeClasses()}>
       <div className="flex items-center">
         <div className="flex items-center mr-2 h-5 w-5 sm:h-6 sm:w-6 bg-primary rounded-none p-1 pixel-border">
           <Zap className="h-3 w-3 sm:h-4 sm:w-4 text-white retro-icon" />
@@ -41,7 +63,7 @@ const Header: React.FC = () => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
+          onClick={toggleTheme}
           aria-label="Toggle theme"
           className="retro-theme-toggle h-8 w-8 sm:h-9 sm:w-9"
         >

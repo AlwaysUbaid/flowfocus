@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { toast } from '../hooks/use-toast';
 
 // Define theme types
 type ThemeMode = 'light' | 'dark';
@@ -35,8 +36,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, []);
 
+  // Apply theme mode to document
   useEffect(() => {
-    // Apply theme to document
     if (mode === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
@@ -45,8 +46,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     
     // Save to localStorage
     localStorage.setItem('themeMode', mode);
+    
+    // Show toast notification
+    toast({
+      title: `${mode === 'dark' ? 'Dark' : 'Light'} Mode Activated`,
+      description: `Theme switched to ${mode} mode`,
+      duration: 3000,
+    });
   }, [mode]);
 
+  // Apply color theme
   useEffect(() => {
     // Apply color theme
     document.documentElement.dataset.theme = color;
@@ -59,6 +68,23 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     
     // Save to localStorage
     localStorage.setItem('themeColor', color);
+    
+    // Only show toast if not the initial load
+    if (document.readyState === 'complete') {
+      const colorNames = {
+        default: 'Default Purple',
+        purple: 'Rich Purple',
+        blue: 'Ocean Blue',
+        green: 'Forest Green',
+        retro: 'Retro Pink'
+      };
+      
+      toast({
+        title: `${colorNames[color]} Theme Applied`,
+        description: 'Color theme updated',
+        duration: 3000,
+      });
+    }
   }, [color]);
 
   return (

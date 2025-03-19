@@ -1,9 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Music, Album, Disc } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useIsMobile } from '../hooks/use-mobile';
+import { useTheme } from '../contexts/ThemeContext';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
 
 interface YouTubeVideoProps {
@@ -55,6 +56,55 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
   const [customVideoUrl, setCustomVideoUrl] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
   const isMobile = useIsMobile();
+  const { color, mode } = useTheme();
+
+  // Get theme-specific colors
+  const getThemeColors = () => {
+    switch (color) {
+      case 'purple':
+        return {
+          primary: mode === 'dark' ? '#9d5cf7' : '#8B5CF6',
+          secondary: mode === 'dark' ? '#7c3aed' : '#6E59A5',
+          accent: mode === 'dark' ? '#6d28d9' : '#5f42a9',
+          border: mode === 'dark' ? '#4c1d95' : '#4E3980',
+          highlight: mode === 'dark' ? '#D6BCFA' : '#E5DEFF',
+        };
+      case 'blue':
+        return {
+          primary: mode === 'dark' ? '#38bdf8' : '#0EA5E9',
+          secondary: mode === 'dark' ? '#0284c7' : '#0369A1',
+          accent: mode === 'dark' ? '#0369a1' : '#075985',
+          border: mode === 'dark' ? '#075985' : '#0C4A6E',
+          highlight: mode === 'dark' ? '#BAE6FD' : '#E0F2FE',
+        };
+      case 'green':
+        return {
+          primary: mode === 'dark' ? '#22c55e' : '#10B981',
+          secondary: mode === 'dark' ? '#16a34a' : '#047857',
+          accent: mode === 'dark' ? '#15803d' : '#065F46',
+          border: mode === 'dark' ? '#166534' : '#064E3B',
+          highlight: mode === 'dark' ? '#BBF7D0' : '#DCFCE7',
+        };
+      case 'retro': 
+        return {
+          primary: mode === 'dark' ? '#e879f9' : '#D946EF',
+          secondary: mode === 'dark' ? '#d946ef' : '#C026D3',
+          accent: mode === 'dark' ? '#c026d3' : '#A21CAF',
+          border: mode === 'dark' ? '#a21caf' : '#86198F',
+          highlight: mode === 'dark' ? '#F5D0FE' : '#FAE8FF',
+        };
+      default: // Default theme
+        return {
+          primary: mode === 'dark' ? '#9b87f5' : '#8755FE',
+          secondary: mode === 'dark' ? '#8755fe' : '#7E69AB',
+          accent: mode === 'dark' ? '#7e69ab' : '#6E59A5',
+          border: mode === 'dark' ? '#6e59a5' : '#4E3980',
+          highlight: mode === 'dark' ? '#D6BCFA' : '#E5DEFF',
+        };
+    }
+  };
+
+  const themeColors = getThemeColors();
 
   // Function to handle custom video input
   const handleCustomVideo = () => {
@@ -90,12 +140,17 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
     setCurrentVideoSrc(embedUrl);
   };
 
+  // Update TV style when theme changes
+  useEffect(() => {
+    // For any side-effects when theme changes
+  }, [color, mode]);
+
   return (
     <div className="w-full max-w-full overflow-hidden">
       {/* TV Container */}
-      <div className="relative 
+      <div className={`relative 
                     mx-auto
-                    border-[15px] sm:border-[20px] md:border-[25px] border-[#6E59A5] dark:border-[#4E3980]
+                    border-[15px] sm:border-[20px] md:border-[25px] 
                     rounded-xl 
                     shadow-[6px_8px_0px_0px_rgba(0,0,0,0.5)] sm:shadow-[8px_12px_0px_0px_rgba(0,0,0,0.5)] md:shadow-[12px_15px_0px_0px_rgba(0,0,0,0.5)]
                     dark:shadow-[12px_15px_0px_0px_rgba(0,0,0,0.7)]
@@ -104,7 +159,12 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
                     hover:translate-y-[-4px] sm:hover:translate-y-[-6px] md:hover:translate-y-[-8px] 
                     transform-style-preserve-3d
                     w-full max-w-full sm:max-w-[95%] md:max-w-3xl
-                    bg-gradient-to-b from-[#9b87f5] to-[#7E69AB]">
+                    bg-gradient-to-b`}
+           style={{
+             borderColor: themeColors.border,
+             background: `linear-gradient(to bottom, ${themeColors.primary}, ${themeColors.secondary})`
+           }}
+      >
       
         {/* TV Top Panel with buttons */}
         <div className="flex items-center justify-between mb-2 px-2 sm:px-3 md:px-5 py-1 sm:py-2 
@@ -112,10 +172,14 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
                       border-b-2 sm:border-b-3 md:border-b-4 border-[#000000]
                       shadow-[inset_0px_2px_5px_rgba(255,255,255,0.1)]">
           <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
-            <h3 className="font-bold text-sm sm:text-base md:text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#E5DEFF] to-[#8B5CF6]">
+            <h3 className="font-bold text-sm sm:text-base md:text-xl text-transparent bg-clip-text"
+                style={{ 
+                  backgroundImage: `linear-gradient(to right, ${themeColors.highlight}, ${themeColors.primary})` 
+                }}>
               FOCUS MUSIC
             </h3>
-            <div className="h-1 w-1 sm:h-1.5 sm:w-1.5 md:h-2 md:w-2 rounded-full bg-[#D6BCFA] animate-pulse"></div>
+            <div className="h-1 w-1 sm:h-1.5 sm:w-1.5 md:h-2 md:w-2 rounded-full animate-pulse"
+                 style={{ backgroundColor: themeColors.highlight }}></div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
             <button 
@@ -129,7 +193,8 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
                         active:shadow-none
                         transition-all duration-150"
             >
-              <div className={`h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 rounded-full ${isPowered ? 'bg-[#E5DEFF]' : 'bg-[#8B5CF6]'} shadow-[0_0_5px_rgba(139,92,246,0.8)]`}></div>
+              <div className={`h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 rounded-full ${isPowered ? 'bg-[#E5DEFF]' : ''} shadow-[0_0_5px_rgba(139,92,246,0.8)]`}
+                   style={{ backgroundColor: isPowered ? themeColors.highlight : themeColors.primary }}></div>
             </button>
           </div>
         </div>
@@ -200,9 +265,9 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
               {/* Screen glare/reflection - reduced */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.08),transparent_80%)]"></div>
               
-              {/* Color distortion at edges - changed to purple tint */}
+              {/* Color distortion at edges - changed to match theme color */}
               <div className="absolute inset-0 opacity-8" style={{
-                background: 'linear-gradient(to right, rgba(147,51,234,0.5) 0%, transparent 5%, transparent 95%, rgba(91,33,182,0.5) 100%)'
+                background: `linear-gradient(to right, ${themeColors.primary}80 0%, transparent 5%, transparent 95%, ${themeColors.secondary}80 100%)`
               }}></div>
               
               {/* VHS tracking lines */}
@@ -219,17 +284,24 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
                       bg-gradient-to-b from-[#222222] to-[#111111] dark:from-[#1A1A1A] dark:to-[#000000]
                       border-t-2 sm:border-t-3 md:border-t-4 border-[#000000]">
           {/* TV Brand */}
-          <div className="text-xs sm:text-sm text-[#D6BCFA] font-bold tracking-widest drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)]">
+          <div className="text-xs sm:text-sm font-bold tracking-widest drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)]"
+               style={{ color: themeColors.highlight }}>
             FLOWTRON
           </div>
           
           {/* Control knobs */}
           <div className="flex gap-2 sm:gap-3 md:gap-4">
-            <div className="w-2.5 h-2.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-gradient-to-b from-[#8B5CF6] to-[#6E59A5] border border-[#222] sm:border-2 md:border-2 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]"></div>
-            <div className="w-2.5 h-2.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-gradient-to-b from-[#8B5CF6] to-[#6E59A5] border border-[#222] sm:border-2 md:border-2 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]"></div>
-            {!isMobile && (
-              <div className="w-2.5 h-2.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-gradient-to-b from-[#8B5CF6] to-[#6E59A5] border border-[#222] sm:border-2 md:border-2 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]"></div>
-            )}
+            {[1, 2, 3].map((_, index) => (
+              !isMobile || index < 2 ? (
+                <div 
+                  key={index}
+                  className="w-2.5 h-2.5 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full border border-[#222] sm:border-2 md:border-2 shadow-[0_2px_4px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+                  style={{
+                    background: `linear-gradient(to bottom, ${themeColors.primary}, ${themeColors.secondary})`
+                  }}
+                ></div>
+              ) : null
+            ))}
           </div>
         </div>
       </div>
@@ -247,7 +319,8 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
             />
             <Button 
               onClick={handleCustomVideo}
-              className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+              style={{ backgroundColor: themeColors.primary, color: 'white' }}
+              className="hover:opacity-90"
             >
               Play
             </Button>
@@ -265,7 +338,7 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
       <div className="mt-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-sm sm:text-base flex items-center gap-2">
-            <Music className="h-4 w-4 text-[#8B5CF6]" />
+            <Music className="h-4 w-4" style={{ color: themeColors.primary }} />
             Focus Music Playlist
           </h3>
           {!showCustomInput && (
@@ -295,7 +368,13 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
                   onClick={() => playFromPlaylist(video.id)}
                 >
                   {/* Video Thumbnail */}
-                  <div className={`relative h-24 sm:h-28 md:h-32 rounded-md overflow-hidden border border-[#6E59A5] group-hover:border-[#D6BCFA] transition-all duration-300 shadow-md group-hover:shadow-[#8B5CF6]/20 ${video.color}`}>
+                  <div className="relative h-24 sm:h-28 md:h-32 rounded-md overflow-hidden border group-hover:border-opacity-100 transition-all duration-300 shadow-md group-hover:shadow-lg"
+                       style={{ 
+                         borderColor: themeColors.border, 
+                         borderWidth: '1px',
+                         background: `linear-gradient(to bottom, ${themeColors.primary}, ${themeColors.secondary})`,
+                         boxShadow: `0 4px 6px -1px ${themeColors.primary}20`
+                       }}>
                     {/* Album icon */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
                       <Disc className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 text-white/80 mb-1 sm:mb-2" />
@@ -314,8 +393,10 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute -left-4 sm:-left-6 top-1/3 bg-[#6E59A5]/80 hover:bg-[#8B5CF6] text-white" />
-          <CarouselNext className="absolute -right-4 sm:-right-6 top-1/3 bg-[#6E59A5]/80 hover:bg-[#8B5CF6] text-white" />
+          <CarouselPrevious className="absolute -left-4 sm:-left-6 top-1/3 text-white" 
+                           style={{ backgroundColor: `${themeColors.secondary}CC` }} />
+          <CarouselNext className="absolute -right-4 sm:-right-6 top-1/3 text-white"
+                       style={{ backgroundColor: `${themeColors.secondary}CC` }} />
         </Carousel>
       </div>
 

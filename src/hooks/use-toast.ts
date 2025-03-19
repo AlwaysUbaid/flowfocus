@@ -6,7 +6,7 @@ import type {
 } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+const TOAST_REMOVE_DELAY = 3000 // Changed from 1000000 to 3000ms (3 seconds)
 
 type ToasterToast = ToastProps & {
   id: string
@@ -74,6 +74,14 @@ const addToRemoveQueue = (toastId: string) => {
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_TOAST":
+      // Remove any existing toasts when adding a new one
+      if (state.toasts.length > 0) {
+        state.toasts.forEach(toast => {
+          if (toast.open) {
+            dispatch({ type: "DISMISS_TOAST", toastId: toast.id })
+          }
+        })
+      }
       return {
         ...state,
         toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
