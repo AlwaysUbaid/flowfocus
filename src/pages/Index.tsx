@@ -74,16 +74,13 @@ const Index = () => {
             {/* Stats section - simplified for mobile */}
             <StatsPanel />
             
-            {/* Info panel higher up for mobile */}
-            <div className="mt-2 animate-fade-in">
-              <InfoPanel />
-            </div>
-            
             {/* Music Player - optimized for mobile */}
             <YouTubeVideo videoSrc="" title="Focus Music Player" />
+            
+            {/* Info panel moved to header with "?" icon */}
           </div>
         ) : (
-          // Desktop layout - centered timer with controls
+          // Desktop layout - centered timer with controls and TV above
           <div className="grid lg:grid-cols-2 gap-6 pt-4">
             <div className="flex flex-col">
               <div className="text-center md:text-left mb-4 md:mb-5 animate-fade-in">
@@ -110,8 +107,9 @@ const Index = () => {
             </div>
             
             <div className="flex flex-col space-y-5 md:space-y-6">
-              <div className="animate-slide-in">
-                <InfoPanel />
+              {/* Retro TV moved above */}
+              <div className="animate-fade-in">
+                <YouTubeVideo videoSrc="" title="Focus Music Player" />
               </div>
               
               <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 md:p-5 border animate-fade-in">
@@ -125,7 +123,7 @@ const Index = () => {
                 </div>
               </div>
               
-              <YouTubeVideo videoSrc="" title="Focus Music Player" />
+              {/* About section removed from here, moved to header as "?" icon */}
             </div>
           </div>
         )}

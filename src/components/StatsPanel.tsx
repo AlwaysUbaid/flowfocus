@@ -5,6 +5,7 @@ import { Clock, Zap, Trophy, Hash, Activity, Calendar } from 'lucide-react';
 import { useIsMobile } from '../hooks/use-mobile';
 import { useTheme } from '../contexts/ThemeContext';
 import { Card } from './ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
 const StatsPanel: React.FC = () => {
   const { todayFocusTime, todayFlowStates, longestSession, totalSessions, averageFocusTime, weeklyFocusTime } = useTimer();
@@ -51,46 +52,25 @@ const StatsPanel: React.FC = () => {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 md:gap-6 mb-6 animate-fade-in">
+    <div className="grid grid-cols-3 gap-2 mb-6 animate-fade-in">
       <StatCard 
-        icon={<Clock className="h-5 w-5" />}
+        icon={<Clock className="h-4 w-4" />}
         value={formatTime(todayFocusTime)}
         label="FOCUS TIME"
         theme={color}
       />
       
       <StatCard 
-        icon={<Hash className="h-5 w-5" />}
-        value={totalSessions.toString()}
-        label="SESSIONS"
-        theme={color}
-      />
-      
-      <StatCard 
-        icon={<Zap className="h-5 w-5" />}
+        icon={<Zap className="h-4 w-4" />}
         value={todayFlowStates.toString()}
         label="FLOW STATES"
         theme={color}
       />
       
       <StatCard 
-        icon={<Trophy className="h-5 w-5" />}
+        icon={<Trophy className="h-4 w-4" />}
         value={formatLongestSession(longestSession)}
-        label="LONGEST SESSION"
-        theme={color}
-      />
-
-      <StatCard 
-        icon={<Activity className="h-5 w-5" />}
-        value={formatTime(averageFocusTime)}
-        label="AVG. SESSION"
-        theme={color}
-      />
-      
-      <StatCard 
-        icon={<Calendar className="h-5 w-5" />}
-        value={formatTime(weeklyFocusTime)}
-        label="WEEKLY FOCUS"
+        label="LONGEST"
         theme={color}
       />
     </div>
@@ -117,25 +97,13 @@ const StatCard: React.FC<StatCardProps> = ({ icon, value, label, isMobile = fals
     }
   };
 
-  if (isMobile) {
-    return (
-      <Card className="bg-card/50 backdrop-blur-sm border-[1px] rounded-xl p-3 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all duration-200 hover:bg-card/80">
-        <div className={`${getIconColor()} mb-1`}>
-          {icon}
-        </div>
-        <div className="text-lg font-bold digital-clock">{value}</div>
-        <div className="text-xs text-muted-foreground tracking-wider">{label}</div>
-      </Card>
-    );
-  }
-
   return (
-    <Card className="bg-card/50 backdrop-blur-sm border-[1px] rounded-xl p-4 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all duration-200 hover:bg-card/80">
-      <div className={`${getIconColor()} mb-2`}>
+    <Card className="bg-card/50 backdrop-blur-sm border-[1px] rounded-lg p-2 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all duration-200 hover:bg-card/80">
+      <div className={`${getIconColor()} mb-0.5`}>
         {icon}
       </div>
-      <div className="text-2xl font-bold digital-clock">{value}</div>
-      <div className="text-xs text-muted-foreground tracking-wider">{label}</div>
+      <div className="text-lg font-semibold digital-clock">{value}</div>
+      <div className="text-[10px] text-muted-foreground tracking-wider">{label}</div>
     </Card>
   );
 };
