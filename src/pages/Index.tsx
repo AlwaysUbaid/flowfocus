@@ -13,7 +13,7 @@ import { useIsMobile } from '../hooks/use-mobile';
 const Index = () => {
   const { timeLeft, mode, isRunning } = useTimer();
   const [showRatingDialog, setShowRatingDialog] = useState(false);
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
   
   // Show rating dialog when timer completes
   useEffect(() => {
@@ -51,7 +51,7 @@ const Index = () => {
       <main className="flex-1 container mx-auto py-3 px-2 sm:py-4 sm:px-3 md:py-6 md:px-4 overflow-x-hidden">
         {/* Mobile: Simplified layout with optimized spacing */}
         {isMobile ? (
-          <div className="flex flex-col space-y-3">
+          <div className="flex flex-col space-y-3 mb-16"> {/* Added bottom margin for fixed footer */}
             {/* Timer section */}
             <div className="flex justify-center -mt-2 mb-1">
               <TimerDisplay />
@@ -70,13 +70,13 @@ const Index = () => {
             {/* Stats section - simplified for mobile */}
             <StatsPanel />
             
-            {/* Music Player - optimized for mobile */}
-            <YouTubeVideo videoSrc="" title="Focus Music Player" />
-            
-            {/* Info panel at the bottom for mobile */}
-            <div className="mt-2 mb-12">
+            {/* Info panel higher up for mobile */}
+            <div className="mt-2">
               <InfoPanel />
             </div>
+            
+            {/* Music Player - optimized for mobile */}
+            <YouTubeVideo videoSrc="" title="Focus Music Player" />
           </div>
         ) : (
           // Desktop layout - two columns
