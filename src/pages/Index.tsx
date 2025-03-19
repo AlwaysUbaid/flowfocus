@@ -54,12 +54,12 @@ const Index = () => {
         {isMobile ? (
           <div className="flex flex-col space-y-4 mb-16"> {/* Added bottom margin for fixed footer */}
             {/* Timer section - full screen on mobile */}
-            <div className="flex justify-center items-center min-h-[60vh] -mt-2 mb-1">
+            <div className="flex justify-center items-center min-h-[40vh] -mt-2 mb-1">
               <TimerDisplay />
             </div>
             
             {/* Controls section */}
-            <div className="bg-card rounded-lg p-3 border shadow-sm animate-fade-in">
+            <div className="bg-card/60 backdrop-blur-sm rounded-xl p-3 border shadow-sm animate-fade-in">
               <div className="text-center mb-2">
                 <h1 className="text-base font-bold">Progressive Pomodoro</h1>
                 <p className="text-xs text-muted-foreground">Start small, build momentum</p>
@@ -93,7 +93,7 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="bg-card rounded-lg p-4 md:p-6 border shadow-sm mb-5 animate-scale-in">
+              <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 md:p-6 border shadow-sm mb-5 animate-scale-in">
                 <div className="flex justify-center mb-5">
                   <TimerDisplay />
                 </div>
@@ -104,7 +104,7 @@ const Index = () => {
                 </div>
               </div>
               
-              <div className="mt-auto animate-fade-in">
+              <div className="animate-fade-in">
                 <StatsPanel />
               </div>
             </div>
@@ -114,22 +114,13 @@ const Index = () => {
                 <InfoPanel />
               </div>
               
-              <div className="bg-card rounded-lg p-4 md:p-5 border animate-fade-in">
-                <h3 className="font-semibold mb-3 md:mb-4 text-sm sm:text-base">Today's Progress</h3>
-                <div className="grid grid-cols-3 gap-3 md:gap-4 text-center">
-                  <div className="border rounded-lg p-3 md:p-4 hover:bg-secondary/50 transition-colors">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-mono font-bold">0h</div>
-                    <div className="text-[0.6rem] sm:text-xs text-muted-foreground mt-1">Focus Time</div>
-                  </div>
-                  
-                  <div className="border rounded-lg p-3 md:p-4 hover:bg-secondary/50 transition-colors">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-mono font-bold">0</div>
-                    <div className="text-[0.6rem] sm:text-xs text-muted-foreground mt-1">Flow States</div>
-                  </div>
-                  
-                  <div className="border rounded-lg p-3 md:p-4 hover:bg-secondary/50 transition-colors">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-mono font-bold">0m</div>
-                    <div className="text-[0.6rem] sm:text-xs text-muted-foreground mt-1">Longest Session</div>
+              <div className="bg-card/60 backdrop-blur-sm rounded-xl p-4 md:p-5 border animate-fade-in">
+                <h3 className="font-semibold mb-3 md:mb-4 text-sm sm:text-base">Weekly Progress</h3>
+                <div className="grid grid-cols-1 gap-3 md:gap-4">
+                  {/* We'll build more advanced stats here in future updates */}
+                  <div className="border rounded-lg p-3 md:p-4 bg-card/50 text-center">
+                    <div className="text-xs text-muted-foreground mb-2">Statistics saved in your browser</div>
+                    <div className="text-sm">Your focus data is automatically saved locally</div>
                   </div>
                 </div>
               </div>

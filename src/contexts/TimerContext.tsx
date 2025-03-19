@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -21,6 +20,8 @@ interface TimerContextType {
   todayFlowStates: number;
   longestSession: number;
   totalSessions: number;
+  averageFocusTime: number;
+  weeklyFocusTime: number;
   
   // Actions
   setDuration: (duration: number) => void;
@@ -34,6 +35,28 @@ interface TimerContextType {
   continueSession: () => void;
   toggleMode: () => void;
 }
+
+interface StatsData {
+  todayFocusTime: number;
+  todayFlowStates: number;
+  longestSession: number;
+  totalSessions: number;
+  sessionHistory: {
+    date: string;
+    duration: number;
+    rating?: FocusRating;
+  }[];
+  lastUpdated: string;
+}
+
+const defaultStats: StatsData = {
+  todayFocusTime: 0,
+  todayFlowStates: 0,
+  longestSession: 0,
+  totalSessions: 0,
+  sessionHistory: [],
+  lastUpdated: new Date().toISOString().split('T')[0]
+};
 
 const TimerContext = createContext<TimerContextType | undefined>(undefined);
 
@@ -49,11 +72,80 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Focus tracking
   const [focusRating, setFocusRating] = useState<FocusRating | null>(null);
   
-  // Stats - would be in localStorage in real app
+  // Stats with localStorage
+  const [statsData, setStatsData] = useState<StatsData>(defaultStats);
   const [todayFocusTime, setTodayFocusTime] = useState(0);
   const [todayFlowStates, setTodayFlowStates] = useState(0);
   const [longestSession, setLongestSession] = useState(0);
   const [totalSessions, setTotalSessions] = useState(0);
+  const [averageFocusTime, setAverageFocusTime] = useState(0);
+  const [weeklyFocusTime, setWeeklyFocusTime] = useState(0);
+  
+  // Load stats from localStorage on initial load
+  useEffect(() => {
+    const loadStats = () => {
+      try {
+        const savedStats = localStorage.getItem('flowFocusStats');
+        if (savedStats) {
+          const parsedStats: StatsData = JSON.parse(savedStats);
+          
+          // Check if it's a new day, reset daily stats if needed
+          const today = new Date().toISOString().split('T')[0];
+          if (parsedStats.lastUpdated !== today) {
+            // Keep historical data but reset today's counters
+            setStatsData({
+              ...parsedStats,
+              todayFocusTime: 0,
+              todayFlowStates: 0,
+              lastUpdated: today
+            });
+          } else {
+            setStatsData(parsedStats);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading stats from localStorage:', error);
+        // If there's an error, initialize with default stats
+        setStatsData(defaultStats);
+      }
+    };
+    
+    loadStats();
+  }, []);
+  
+  // Update state variables when statsData changes
+  useEffect(() => {
+    setTodayFocusTime(statsData.todayFocusTime);
+    setTodayFlowStates(statsData.todayFlowStates);
+    setLongestSession(statsData.longestSession);
+    setTotalSessions(statsData.totalSessions);
+    
+    // Calculate average session time
+    if (statsData.sessionHistory.length > 0) {
+      const totalTime = statsData.sessionHistory.reduce((sum, session) => sum + session.duration, 0);
+      setAverageFocusTime(Math.floor(totalTime / statsData.sessionHistory.length));
+    }
+    
+    // Calculate weekly focus time
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay()); // Start of week (Sunday)
+    
+    const weeklyTime = statsData.sessionHistory
+      .filter(session => {
+        const sessionDate = new Date(session.date);
+        return sessionDate >= startOfWeek;
+      })
+      .reduce((sum, session) => sum + session.duration, 0);
+    
+    setWeeklyFocusTime(weeklyTime);
+    
+  }, [statsData]);
+  
+  // Save stats to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('flowFocusStats', JSON.stringify(statsData));
+  }, [statsData]);
   
   // Timer functionality
   useEffect(() => {
@@ -96,12 +188,25 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setIsRunning(false);
     
     if (mode === 'work') {
-      setTotalSessions(prev => prev + 1);
-      setTodayFocusTime(prev => prev + duration);
+      // Update session history and stats
+      const completedSessionDuration = duration;
+      const today = new Date().toISOString().split('T')[0];
       
-      if (duration > longestSession) {
-        setLongestSession(duration);
-      }
+      setStatsData(prev => {
+        const newSessionHistory = [
+          ...prev.sessionHistory,
+          { date: today, duration: completedSessionDuration }
+        ];
+        
+        return {
+          ...prev,
+          todayFocusTime: prev.todayFocusTime + completedSessionDuration,
+          totalSessions: prev.totalSessions + 1,
+          longestSession: Math.max(prev.longestSession, completedSessionDuration),
+          sessionHistory: newSessionHistory,
+          lastUpdated: today
+        };
+      });
       
       // Show focus rating dialog after work session
       toast("Session Complete", {
@@ -171,12 +276,34 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
   
-  // Handle focus rating
+  // Handle focus rating - updated to save rating in session history
   const rateFocus = (rating: FocusRating) => {
     setFocusRating(rating);
     
+    // Update the last session with the rating
+    setStatsData(prev => {
+      const updatedHistory = [...prev.sessionHistory];
+      if (updatedHistory.length > 0) {
+        const lastSession = updatedHistory[updatedHistory.length - 1];
+        updatedHistory[updatedHistory.length - 1] = {
+          ...lastSession,
+          rating
+        };
+      }
+      
+      // If flow state, increment counter
+      const newFlowStates = rating === 'flow' 
+        ? prev.todayFlowStates + 1 
+        : prev.todayFlowStates;
+      
+      return {
+        ...prev,
+        sessionHistory: updatedHistory,
+        todayFlowStates: newFlowStates
+      };
+    });
+    
     if (rating === 'flow') {
-      setTodayFlowStates(prev => prev + 1);
       toast("Flow State Detected!", {
         description: "Would you like to continue your session?",
       });
@@ -233,6 +360,8 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     todayFlowStates,
     longestSession,
     totalSessions,
+    averageFocusTime,
+    weeklyFocusTime,
     setDuration,
     setBreakDuration,
     startTimer,

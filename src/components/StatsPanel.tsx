@@ -1,12 +1,15 @@
 
 import React from 'react';
 import { useTimer } from '../contexts/TimerContext';
-import { Clock, Zap, Trophy, Hash } from 'lucide-react';
+import { Clock, Zap, Trophy, Hash, Activity, Calendar } from 'lucide-react';
 import { useIsMobile } from '../hooks/use-mobile';
+import { useTheme } from '../contexts/ThemeContext';
+import { Card } from './ui/card';
 
 const StatsPanel: React.FC = () => {
-  const { todayFocusTime, todayFlowStates, longestSession, totalSessions } = useTimer();
+  const { todayFocusTime, todayFlowStates, longestSession, totalSessions, averageFocusTime, weeklyFocusTime } = useTimer();
   const isMobile = useIsMobile();
+  const { color } = useTheme();
   
   // Format time as hours:minutes
   const formatTime = (seconds: number): string => {
@@ -27,12 +30,13 @@ const StatsPanel: React.FC = () => {
 
   if (isMobile) {
     return (
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2 animate-fade-in">
         <StatCard 
           icon={<Clock className="h-4 w-4 text-primary" />}
           value={formatTime(todayFocusTime)}
           label="FOCUS TIME"
           isMobile={true}
+          theme={color}
         />
         
         <StatCard 
@@ -40,35 +44,54 @@ const StatsPanel: React.FC = () => {
           value={todayFlowStates.toString()}
           label="FLOW STATES"
           isMobile={true}
+          theme={color}
         />
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 md:gap-6 mb-6">
+    <div className="grid grid-cols-2 gap-4 md:gap-6 mb-6 animate-fade-in">
       <StatCard 
-        icon={<Clock className="h-5 w-5 text-primary" />}
+        icon={<Clock className="h-5 w-5" />}
         value={formatTime(todayFocusTime)}
-        label="Focus Time"
+        label="FOCUS TIME"
+        theme={color}
       />
       
       <StatCard 
-        icon={<Hash className="h-5 w-5 text-primary" />}
+        icon={<Hash className="h-5 w-5" />}
         value={totalSessions.toString()}
-        label="Sessions"
+        label="SESSIONS"
+        theme={color}
       />
       
       <StatCard 
-        icon={<Zap className="h-5 w-5 text-primary" />}
+        icon={<Zap className="h-5 w-5" />}
         value={todayFlowStates.toString()}
-        label="Flow States"
+        label="FLOW STATES"
+        theme={color}
       />
       
       <StatCard 
-        icon={<Trophy className="h-5 w-5 text-primary" />}
+        icon={<Trophy className="h-5 w-5" />}
         value={formatLongestSession(longestSession)}
-        label="Longest Session"
+        label="LONGEST SESSION"
+        theme={color}
+      />
+
+      <StatCard 
+        icon={<Activity className="h-5 w-5" />}
+        value={formatTime(averageFocusTime)}
+        label="AVG. SESSION"
+        theme={color}
+      />
+      
+      <StatCard 
+        icon={<Calendar className="h-5 w-5" />}
+        value={formatTime(weeklyFocusTime)}
+        label="WEEKLY FOCUS"
+        theme={color}
       />
     </div>
   );
@@ -79,29 +102,41 @@ interface StatCardProps {
   value: string;
   label: string;
   isMobile?: boolean;
+  theme?: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ icon, value, label, isMobile = false }) => {
+const StatCard: React.FC<StatCardProps> = ({ icon, value, label, isMobile = false, theme = 'default' }) => {
+  // Apply theme-specific styles
+  const getIconColor = () => {
+    switch (theme) {
+      case 'purple': return 'text-purple-400';
+      case 'blue': return 'text-blue-400';
+      case 'green': return 'text-green-400';
+      case 'retro': return 'text-pink-400 retro-glow';
+      default: return 'text-primary';
+    }
+  };
+
   if (isMobile) {
     return (
-      <div className="bg-card rounded-lg p-3 border flex flex-col items-center justify-center shadow-sm text-center">
-        <div className="flex items-center justify-center gap-1 mb-1">
+      <Card className="bg-card/50 backdrop-blur-sm border-[1px] rounded-xl p-3 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all duration-200 hover:bg-card/80">
+        <div className={`${getIconColor()} mb-1`}>
           {icon}
-          <div className="text-xs uppercase tracking-wide text-muted-foreground">{label}</div>
         </div>
-        <div className="text-xl font-bold digital-clock">{value}</div>
-      </div>
+        <div className="text-lg font-bold digital-clock">{value}</div>
+        <div className="text-xs text-muted-foreground tracking-wider">{label}</div>
+      </Card>
     );
   }
 
   return (
-    <div className="bg-card rounded-lg p-4 border flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all duration-200">
-      <div className="flex items-center justify-center mb-1">
+    <Card className="bg-card/50 backdrop-blur-sm border-[1px] rounded-xl p-4 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-all duration-200 hover:bg-card/80">
+      <div className={`${getIconColor()} mb-2`}>
         {icon}
       </div>
-      <div className="text-xl font-bold">{value}</div>
-      <div className="text-xs text-muted-foreground uppercase tracking-wide">{label}</div>
-    </div>
+      <div className="text-2xl font-bold digital-clock">{value}</div>
+      <div className="text-xs text-muted-foreground tracking-wider">{label}</div>
+    </Card>
   );
 };
 
