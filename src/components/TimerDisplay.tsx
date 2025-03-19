@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import CircularProgress from './CircularProgress';
@@ -36,7 +35,6 @@ const TimerDisplay: React.FC = () => {
   const [pulseEffect, setPulseEffect] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
   
-  // Add pulse effect every minute
   useEffect(() => {
     if (timeLeft % 60 === 0 && timeLeft > 0 && isRunning) {
       setPulseEffect(true);
@@ -44,26 +42,22 @@ const TimerDisplay: React.FC = () => {
     }
   }, [timeLeft, isRunning]);
 
-  // Format time as mm:ss
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Calculate progress (0 to 1)
   const calculateProgress = (): number => {
     const totalDuration = mode === 'work' ? duration : breakDuration;
     if (totalDuration === 0) return 0;
     return timeLeft / totalDuration;
   };
 
-  // Get color based on mode
   const getColor = (): string => {
     return mode === 'work' ? 'hsl(var(--primary))' : 'hsl(var(--focused))';
   };
 
-  // Handle clicking on the timer display to toggle between work and break
   const handleTimerClick = () => {
     if (!isRunning) {
       toggleMode();
@@ -71,13 +65,11 @@ const TimerDisplay: React.FC = () => {
     }
   };
   
-  // Toggle pixel effects
   const togglePixelEffects = () => {
     setPixelated(!pixelated);
     toast(pixelated ? 'Modern mode activated' : 'Retro pixel mode activated');
   };
 
-  // Apply preset duration
   const applyPreset = (seconds: number) => {
     if (mode === 'work') {
       setDuration(seconds);
@@ -87,12 +79,10 @@ const TimerDisplay: React.FC = () => {
     toast(`Set ${mode} duration to ${formatTime(seconds)}`);
   };
 
-  // Toggle presets visibility
   const togglePresets = () => {
     setShowPresets(!showPresets);
   };
 
-  // Adjust timer size based on device
   let timerSize = 280;
   let strokeWidth = 8;
   
@@ -126,17 +116,16 @@ const TimerDisplay: React.FC = () => {
         
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className={`text-5xl font-bold mb-1 sm:mb-2 transition-all duration-300 ${
-            pixelated ? 'digital-clock retro-glow animate-pulse' : 'retro-text font-mono tracking-tight'
+            pixelated ? 'digital-clock retro-glow' : 'retro-text font-mono tracking-tight'
           }`}>
             {formatTime(timeLeft)}
           </div>
           <div className="text-xs sm:text-sm uppercase tracking-wider text-muted-foreground font-medium flex items-center gap-1">
-            <Clock className="h-3 w-3 animate-pulse" />
+            <Clock className="h-3 w-3" />
             <span className="mode-badge">{mode === 'work' ? 'WORK MODE' : 'BREAK MODE'}</span>
           </div>
         </div>
         
-        {/* Settings button */}
         <Button
           onClick={(e) => {
             e.stopPropagation();
@@ -168,7 +157,7 @@ const TimerDisplay: React.FC = () => {
             variant="default"
             size="icon"
             className={`w-12 h-12 rounded-full focus-button-scale ${
-              pixelated ? 'pixel-button !rounded-none animate-pulse' : 'retro-button animate-pulse'
+              pixelated ? 'pixel-button !rounded-none' : 'retro-button'
             }`}
           >
             <Play className="h-6 w-6 ml-0.5" />
@@ -211,13 +200,12 @@ const TimerDisplay: React.FC = () => {
         </Button>
       </div>
       
-      {/* Quick Presets */}
       {showPresets && (
         <div className={`mt-4 bg-background/80 backdrop-blur-md rounded-lg p-3 border animate-fade-in ${pixelated ? 'pixel-border' : ''}`}>
           <div className="flex flex-col space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-xs retro-text">Quick presets:</span>
-              <Zap className="h-3 w-3 text-primary animate-pulse" />
+              <Zap className="h-3 w-3 text-primary" />
             </div>
             <div className="grid grid-cols-4 gap-2">
               {PRESET_DURATIONS.map((preset) => (
