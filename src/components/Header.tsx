@@ -56,8 +56,6 @@ const Header: React.FC = () => {
           </a>
         )}
         
-        {/* Removed the standalone light/dark toggle button */}
-        
         <ThemeSelector />
         
         {isMobile ? (

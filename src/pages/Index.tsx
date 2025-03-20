@@ -93,7 +93,7 @@ const Index = () => {
         {isMobile ? (
           <div className="flex flex-col space-y-4 mb-16"> {/* Added bottom margin for fixed footer */}
             {/* Timer section - full screen on mobile with larger size */}
-            <div className="flex justify-center items-center min-h-[45vh] -mt-2 mb-1">
+            <div className="flex justify-center items-center min-h-[40vh] -mt-2 mb-1">
               <TimerDisplay />
             </div>
             
@@ -106,18 +106,13 @@ const Index = () => {
               <p className="text-xs text-muted-foreground text-center mb-2">Start small, build momentum</p>
               <DurationSlider type="work" />
               <DurationSlider type="break" />
-              
-              {/* Mobile theme selector - small icon */}
-              <div className="flex justify-center mt-3">
-                <ThemeSelector />
-              </div>
             </div>
+            
+            {/* Stats section - enhanced for mobile */}
+            <StatsPanel />
             
             {/* Music Player - optimized for mobile */}
             <YouTubeVideo videoSrc="" title="Focus Music Player" />
-            
-            {/* Stats section - simplified for mobile */}
-            <StatsPanel />
           </div>
         ) : (
           // Desktop layout - centered timer with controls and TV above

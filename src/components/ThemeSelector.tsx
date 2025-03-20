@@ -78,21 +78,26 @@ const ThemeSelector: React.FC = () => {
             <div className="space-y-6 py-2">
               <div>
                 <h3 className="mb-3 text-sm font-medium retro-label">Mode</h3>
-                <ToggleGroup 
-                  type="single" 
-                  defaultValue={mode}
-                  onValueChange={(value) => value && setMode(value as 'light' | 'dark')}
-                  className="flex w-full justify-between pixel-border"
-                >
-                  <ToggleGroupItem value="light" className="flex-1 retro-text">
-                    <Sun className="h-4 w-4 mr-2" />
-                    Light
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="dark" className="flex-1 retro-text">
-                    <MoonStar className="h-4 w-4 mr-2" />
-                    Dark
-                  </ToggleGroupItem>
-                </ToggleGroup>
+                <div className="flex gap-3 p-1 bg-secondary/30 rounded-lg">
+                  <Button
+                    variant={mode === 'light' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setMode('light')}
+                    className={`flex-1 gap-2 ${mode === 'light' ? 'shadow-md' : 'opacity-70'}`}
+                  >
+                    <Sun className="h-4 w-4" />
+                    <span>Light</span>
+                  </Button>
+                  <Button
+                    variant={mode === 'dark' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setMode('dark')}
+                    className={`flex-1 gap-2 ${mode === 'dark' ? 'shadow-md' : 'opacity-70'}`}
+                  >
+                    <MoonStar className="h-4 w-4" />
+                    <span>Dark</span>
+                  </Button>
+                </div>
               </div>
               
               <div>
@@ -156,21 +161,26 @@ const ThemeSelector: React.FC = () => {
         
         <div className="p-2">
           <h4 className="mb-2 text-xs font-medium">Mode</h4>
-          <ToggleGroup 
-            type="single" 
-            defaultValue={mode}
-            onValueChange={(value) => value && setMode(value as 'light' | 'dark')}
-            className="flex justify-between pixel-border w-full"
-          >
-            <ToggleGroupItem value="light" className="flex-1 retro-text text-xs">
-              <Sun className="h-3 w-3 mr-1" />
-              Light
-            </ToggleGroupItem>
-            <ToggleGroupItem value="dark" className="flex-1 retro-text text-xs">
-              <MoonStar className="h-3 w-3 mr-1" />
-              Dark
-            </ToggleGroupItem>
-          </ToggleGroup>
+          <div className="flex gap-2 p-1 bg-secondary/30 rounded-lg">
+            <Button
+              variant={mode === 'light' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setMode('light')}
+              className={`flex-1 gap-1 text-xs h-8 ${mode === 'light' ? 'shadow-md' : 'opacity-70'}`}
+            >
+              <Sun className="h-3 w-3" />
+              <span>Light</span>
+            </Button>
+            <Button
+              variant={mode === 'dark' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setMode('dark')}
+              className={`flex-1 gap-1 text-xs h-8 ${mode === 'dark' ? 'shadow-md' : 'opacity-70'}`}
+            >
+              <MoonStar className="h-3 w-3" />
+              <span>Dark</span>
+            </Button>
+          </div>
         </div>
         
         <DropdownMenuSeparator />

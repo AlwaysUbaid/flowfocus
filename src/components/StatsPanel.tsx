@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTimer } from '../contexts/TimerContext';
-import { Clock, Zap, Trophy, Hash, Activity, Calendar } from 'lucide-react';
+import { Clock, Zap, Trophy, Hash, Activity, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import { useIsMobile } from '../hooks/use-mobile';
 import { useTheme } from '../contexts/ThemeContext';
 import { Card } from './ui/card';
@@ -9,8 +9,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collap
 
 const StatsPanel: React.FC = () => {
   const { todayFocusTime, todayFlowStates, longestSession, totalSessions, averageFocusTime, weeklyFocusTime } = useTimer();
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
   const { color } = useTheme();
+  const [isExpanded, setIsExpanded] = useState(false);
   
   // Format time as hours:minutes
   const formatTime = (seconds: number): string => {
@@ -31,22 +32,70 @@ const StatsPanel: React.FC = () => {
 
   if (isMobile) {
     return (
-      <div className="grid grid-cols-2 gap-2 animate-fade-in">
-        <StatCard 
-          icon={<Clock className="h-4 w-4 text-primary" />}
-          value={formatTime(todayFocusTime)}
-          label="FOCUS TIME"
-          isMobile={true}
-          theme={color}
-        />
-        
-        <StatCard 
-          icon={<Zap className="h-4 w-4 text-primary" />}
-          value={todayFlowStates.toString()}
-          label="FLOW STATES"
-          isMobile={true}
-          theme={color}
-        />
+      <div className="animate-fade-in">
+        <Collapsible open={isExpanded} onOpenChange={setIsExpanded} className="w-full">
+          <div className="grid grid-cols-2 gap-2 mb-2">
+            <StatCard 
+              icon={<Clock className="h-4 w-4 text-primary" />}
+              value={formatTime(todayFocusTime)}
+              label="FOCUS TIME"
+              isMobile={true}
+              theme={color}
+            />
+            
+            <StatCard 
+              icon={<Zap className="h-4 w-4 text-primary" />}
+              value={todayFlowStates.toString()}
+              label="FLOW STATES"
+              isMobile={true}
+              theme={color}
+            />
+          </div>
+          
+          <CollapsibleContent>
+            <div className="grid grid-cols-3 gap-2 my-2">
+              <StatCard 
+                icon={<Trophy className="h-4 w-4" />}
+                value={formatLongestSession(longestSession)}
+                label="LONGEST"
+                isMobile={true}
+                theme={color}
+              />
+              
+              <StatCard 
+                icon={<Hash className="h-4 w-4" />}
+                value={totalSessions ? totalSessions.toString() : "0"}
+                label="SESSIONS"
+                isMobile={true}
+                theme={color}
+              />
+              
+              <StatCard 
+                icon={<Activity className="h-4 w-4" />}
+                value={formatTime(averageFocusTime || 0)}
+                label="AVERAGE"
+                isMobile={true}
+                theme={color}
+              />
+            </div>
+          </CollapsibleContent>
+          
+          <CollapsibleTrigger asChild>
+            <button className="w-full flex items-center justify-center py-1 mt-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+              {isExpanded ? (
+                <>
+                  <span className="mr-1">Show less</span>
+                  <ChevronUp className="h-3 w-3" />
+                </>
+              ) : (
+                <>
+                  <span className="mr-1">View more stats</span>
+                  <ChevronDown className="h-3 w-3" />
+                </>
+              )}
+            </button>
+          </CollapsibleTrigger>
+        </Collapsible>
       </div>
     );
   }
@@ -102,7 +151,7 @@ const StatCard: React.FC<StatCardProps> = ({ icon, value, label, isMobile = fals
       <div className={`${getIconColor()} mb-0.5`}>
         {icon}
       </div>
-      <div className="text-lg font-semibold digital-clock">{value}</div>
+      <div className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold digital-clock`}>{value}</div>
       <div className="text-[10px] text-muted-foreground tracking-wider">{label}</div>
     </Card>
   );
