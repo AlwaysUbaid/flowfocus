@@ -11,6 +11,8 @@ interface ThemeContextType {
   setMode: (mode: ThemeMode) => void;
   color: ThemeColor;
   setColor: (color: ThemeColor) => void;
+  pixelated: boolean;
+  togglePixelated: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -18,11 +20,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mode, setMode] = useState<ThemeMode>('light');
   const [color, setColor] = useState<ThemeColor>('default');
+  const [pixelated, setPixelated] = useState<boolean>(true);
 
   useEffect(() => {
     // Check for user preference in localStorage or system preference
     const savedMode = localStorage.getItem('themeMode') as ThemeMode;
     const savedColor = localStorage.getItem('themeColor') as ThemeColor;
+    const savedPixelated = localStorage.getItem('pixelated');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     if (savedMode) {
@@ -34,7 +38,21 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (savedColor) {
       setColor(savedColor);
     }
+    
+    if (savedPixelated !== null) {
+      setPixelated(savedPixelated === 'true');
+    }
   }, []);
+
+  const togglePixelated = () => {
+    setPixelated(prev => !prev);
+    localStorage.setItem('pixelated', (!pixelated).toString());
+    toast({
+      title: pixelated ? 'Modern Mode Activated' : 'Pixelated Mode Activated',
+      description: pixelated ? 'Visual effects switched to modern' : 'Retro pixel effects enabled',
+      duration: 3000,
+    });
+  };
 
   // Apply theme mode to document
   useEffect(() => {
@@ -88,7 +106,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [color]);
 
   return (
-    <ThemeContext.Provider value={{ mode, setMode, color, setColor }}>
+    <ThemeContext.Provider value={{ 
+      mode, 
+      setMode, 
+      color, 
+      setColor, 
+      pixelated, 
+      togglePixelated 
+    }}>
       {children}
     </ThemeContext.Provider>
   );

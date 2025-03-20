@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import CircularProgress from './CircularProgress';
-import { Play, Pause, RotateCcw, Clock, FastForward, SkipForward, Zap, Settings } from 'lucide-react';
+import { Play, Pause, RotateCcw, Clock, SkipForward, Zap, Settings } from 'lucide-react';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
 import { useIsMobile } from '../hooks/use-mobile';
+import { useTheme } from '../contexts/ThemeContext';
 
 const PRESET_DURATIONS = [
   { label: '5m', value: 5 * 60 },
@@ -31,7 +32,7 @@ const TimerDisplay: React.FC = () => {
     setBreakDuration
   } = useTimer();
   
-  const [pixelated, setPixelated] = useState(true);
+  const { pixelated } = useTheme();
   const { isMobile, isTablet } = useIsMobile();
   const [pulseEffect, setPulseEffect] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
@@ -64,11 +65,6 @@ const TimerDisplay: React.FC = () => {
       toggleMode();
       toast(mode === 'work' ? 'Switched to Break Mode' : 'Switched to Work Mode');
     }
-  };
-  
-  const togglePixelEffects = () => {
-    setPixelated(!pixelated);
-    toast(pixelated ? 'Modern mode activated' : 'Retro pixel mode activated');
   };
 
   const applyPreset = (seconds: number) => {
@@ -188,18 +184,6 @@ const TimerDisplay: React.FC = () => {
           title="Skip to next phase"
         >
           <SkipForward className="h-5 w-5" />
-        </Button>
-      </div>
-      
-      <div className="mt-4 flex justify-center">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="text-xs flex items-center gap-1 bg-primary/10 hover:bg-primary/20 transition-all" 
-          onClick={togglePixelEffects}
-        >
-          <FastForward className="h-3 w-3" />
-          <span className="retro-text">{pixelated ? 'PIXELATED' : 'MODERN'}</span>
         </Button>
       </div>
       

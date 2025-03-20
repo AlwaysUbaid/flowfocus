@@ -8,7 +8,7 @@ import ThemeSelector from './ThemeSelector';
 import { toast } from '../hooks/use-toast';
 
 const Header: React.FC = () => {
-  const { color } = useTheme();
+  const { color, pixelated, togglePixelated } = useTheme();
   const { isMobile } = useIsMobile();
   
   const getThemeClasses = () => {
@@ -26,6 +26,10 @@ const Header: React.FC = () => {
       default:
         return baseClass;
     }
+  };
+
+  const handleRetroToggle = () => {
+    togglePixelated();
   };
 
   return (
@@ -62,19 +66,21 @@ const Header: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            className="text-[0.65rem] h-7 items-center gap-1 pixel-border bg-primary/10 text-primary rounded-none"
+            onClick={handleRetroToggle}
+            className={`text-[0.65rem] h-7 items-center gap-1 pixel-border ${pixelated ? 'bg-primary/10 text-primary' : 'bg-muted/70 text-muted-foreground'} rounded-none`}
           >
             <Gamepad className="h-3 w-3" />
-            <span className="retro-text truncate">RETRO</span>
+            <span className="retro-text truncate">{pixelated ? 'RETRO' : 'MODERN'}</span>
           </Button>
         ) : (
           <Button
             variant="outline"
             size="sm"
-            className="hidden md:flex items-center gap-1 pixel-border bg-primary/20 text-primary ml-1 text-xs py-1 rounded-none"
+            onClick={handleRetroToggle}
+            className={`hidden md:flex items-center gap-1 pixel-border ${pixelated ? 'bg-primary/20 text-primary' : 'bg-muted/70 text-muted-foreground'} ml-1 text-xs py-1 rounded-none`}
           >
             <Gamepad className="h-3.5 w-3.5" />
-            <span className="retro-text">RETRO MODE</span>
+            <span className="retro-text">{pixelated ? 'RETRO MODE' : 'MODERN MODE'}</span>
           </Button>
         )}
       </div>
